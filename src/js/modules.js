@@ -48,7 +48,7 @@ const doc = document, { documentElement: root } = doc;
     parsedUrl.pathname === '/agenda' ||
     parsedUrl.pathname === '/agenda.html'
   ) {
-    const reveal = await import('./modules/reveal-effect');
+    // const reveal = await import('./modules/reveal-effect');
     const header = await import('./modules/header');
     const nav = await import('./modules/nav');
     const cursor = await import('./modules/cursor');

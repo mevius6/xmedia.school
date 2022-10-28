@@ -8,7 +8,7 @@ block content
     .container.bg-overlay#hero(
       data-id="hero"
     )
-      //- video-player.grid__full(basename="page-hero")
+      video-player.grid__full(basename="page-hero")
       noscript: +video({ fileName: 'hero', dims: [1920, 1080] })
       article.flow.grid__start-half.mask-border-gradient&attributes({
         'data-backdrop': 'glassy'
@@ -140,16 +140,6 @@ block content
           |
           | с трансляцией в Zoom. При желании можно приехать на одно из занятий или финальный просмотр из другого города, чтобы познакомиться с ведущей курса и остальной группой.
 
-    //- .container.spaced.--lg#agenda(data-id="agenda")
-      .grid__asym-lhs.sideways.sticky
-        +head({ level: 2, text: 'Расписание занятий', reveal: 'chars' })
-      article.grid__asym-rhs.flow.spaced.--ada-md.scroll-shadows
-        +list({
-          items: agenda,
-          ordered: true,
-          nestedListOrdered: true
-        })
-
     .container.spaced.--lg#reviews(
       data-id="reviews"
     )
@@ -214,22 +204,6 @@ block content
 
   //- .admission
   include ./pug/_footer
-
-  //- svg(height="0" width="0")
-    defs
-      clipPath#cross
-        rect(y="110" x="137" width="90" height="90")
-        rect(x="0" y="110" width="90" height="90")
-        rect(x="137" y="0" width="90" height="90")
-        rect(x="0" y="0" width="90" height="90")
-  //- svg(width="100px" height="100px")
-    defs
-      clipPath#clipx
-        polygon(
-          points="20,0 0,20 30,50
-                  0,80 20,100 50,70
-                  80,100 100,80 70,50 100,20
-                  80 0, 50 30")
 
   include ./pug/_svg-filters
 

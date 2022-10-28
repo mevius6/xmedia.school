@@ -1,10 +1,10 @@
 @use '../config';
 
-.widget,
+aside,
 .page__footer {
-  position: fixed;
+  position: sticky;
   inset-block-end: 0;
-  inset-inline-end: 0;
+  inset-inline-start: 0;
   z-index: 1010;
 }
 
@@ -37,30 +37,6 @@
   margin-inline-end: auto;
   user-select: none;
 
-  // https://codepen.io/t_afif/pen/dyexeKO
- /* --circle-offset:
-    calc(var(--big-circle-r) + var(--pillar-size) + var(--circle-r));
-  --filler:
-    conic-gradient(
-      at right var(--circle-r) top var(--circle-r),
-      #0000 25%,
-      var(--card-color) 0
-    );
-  position: relative;
-  border-top-right-radius: 0;
-  filter: drop-shadow(var(--card-shadow));
-  background: radial-gradient(var(--big-circle-r) at 100% 0%,#0000 98%,var(--card-color)) calc(-1*var(--pillar-size)) var(--pillar-size), radial-gradient(var(--circle-r) at top var(--circle-r) right var(--circle-offset), var(--card-color) 98%,#0000), radial-gradient(var(--circle-r) at right var(--circle-r) top var(--circle-offset), var(--card-color) 98%,#0000), var(--filler) calc(-1*(var(--big-circle-r) + var(--pillar-size))) 0, var(--filler) 0 calc(var(--big-circle-r) + var(--pillar-size));
-  background-repeat: no-repeat;
-
-  --circle-r: 20px;
-  --big-circle-r: 22px;
-  --pillar-size: max(23px , var(--circle-r));
-  --card-color: #fff;
-  --card-shadow: 0 10px 48px rgba(21, 44, 115, 0.15);
-  width: 200px;
-  min-height: 240px;
-  border-radius: 25px; */
-
   border-radius: 1.75ch;
   backdrop-filter: blur(10px);
   filter: drop-shadow(0 0 8px var(--foreground-a25));
@@ -69,7 +45,7 @@
     will-change: transform;
     transform:
       rotateX(20deg) rotateY(-35deg)
-      translate3d(var(--tx, 25%), var(--ty, 33.333%), var(--tz, 1px))
+      translate3d(var(--tx, 25%), var(--ty, 33%), var(--tz, 1px))
       skew(.045turn);
     transform-origin: 50% 50%;
     transform-style: preserve-3d;

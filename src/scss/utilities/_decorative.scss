@@ -392,9 +392,9 @@
     content: '';
     position: absolute;
     inset: 0;
-    padding: 1px;
+    padding: var(--border-gradient-width, 1px);
     border-radius: inherit;
-    background-image: var(--lin-grad-4-color);
+    background-image: var(--border-gradient, var(--lin-grad-2-color));
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
@@ -506,3 +506,29 @@
 .admission {
   @include config.ticket();
 }
+
+// from https://codepen.io/t_afif/pen/dyexeKO
+/* .rounded-corner-cutout {
+  --circle-offset:
+    calc(var(--big-circle-r) + var(--pillar-size) + var(--circle-r));
+  --filler:
+    conic-gradient(
+      at right var(--circle-r) top var(--circle-r),
+      #0000 25%,
+      var(--card-color) 0
+    );
+  position: relative;
+  border-top-right-radius: 0;
+  filter: drop-shadow(var(--card-shadow));
+  background: radial-gradient(var(--big-circle-r) at 100% 0%,#0000 98%,var(--card-color)) calc(-1*var(--pillar-size)) var(--pillar-size), radial-gradient(var(--circle-r) at top var(--circle-r) right var(--circle-offset), var(--card-color) 98%,#0000), radial-gradient(var(--circle-r) at right var(--circle-r) top var(--circle-offset), var(--card-color) 98%,#0000), var(--filler) calc(-1*(var(--big-circle-r) + var(--pillar-size))) 0, var(--filler) 0 calc(var(--big-circle-r) + var(--pillar-size));
+  background-repeat: no-repeat;
+
+  --circle-r: 20px;
+  --big-circle-r: 22px;
+  --pillar-size: max(23px , var(--circle-r));
+  --card-color: #fff;
+  --card-shadow: 0 10px 48px rgba(21, 44, 115, 0.15);
+  width: 200px;
+  min-height: 240px;
+  border-radius: 25px;
+} */
