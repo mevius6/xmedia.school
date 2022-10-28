@@ -1,4 +1,4 @@
-<style>
+<!--style>
   p.dinkus {
     font: normal 1.5em/1.75em system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     color: #61ffca;
@@ -9,7 +9,7 @@
   ul { list-style-type: "\261E\2002"; } /* or "\2004" */
   ul > li ul { list-style-type: "\2022\2002"; }
   ul > li ul > li ul { list-style-type: "\2043\2002"; }
-</style>
+</style-->
 
 <!-- &#x2727;&emsp;&#x2727;&emsp;&#x2727; -->
 <p align="center"
