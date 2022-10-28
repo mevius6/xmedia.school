@@ -1,8 +1,7 @@
 @use '../config';
 
-aside,
 .page__footer {
-  position: sticky;
+  position: fixed;
   inset-block-end: 0;
   inset-inline-start: 0;
   z-index: 1010;
@@ -28,98 +27,48 @@ aside,
   }
 
   a { --arrow: '' }
-}
 
-.widget {
-  display: grid;
-  gap: var(--spacer-2x);
-  padding-block: var(--spacer-2x);
-  margin-inline-end: auto;
-  user-select: none;
-
-  border-radius: 1.75ch;
-  backdrop-filter: blur(10px);
-  filter: drop-shadow(0 0 8px var(--foreground-a25));
-
-  @media (hover: hover) {
-    will-change: transform;
-    transform:
-      rotateX(20deg) rotateY(-35deg)
-      translate3d(var(--tx, 25%), var(--ty, 33%), var(--tz, 1px))
-      skew(.045turn);
-    transform-origin: 50% 50%;
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    transition:
-      transform var(--duration-5) var(--ease-in-out-cubic),
-      filter var(--duration-5) var(--ease-in-out-cubic);
-
-    &:hover {
-      transform: translate3d(0, 0, 0);
-      filter: drop-shadow(0 0 16px var(--foreground-a25));
-    }
-  }
-
-  & > p {
-    aspect-ratio: 5/4;
-    inline-size: calc(5rem + .25vmax); // 6rem
+  p {
     display: grid;
     place-items: center;
     font-family: var(--font-primary);
     color: var(--neutral);
-
-    & > * { grid-area: 1/1; }
-
-    time {
-      font-size: inherit;
-      font-weight: 500;
-      font-style: normal;
-      color: inherit;
-      text-shadow:
-        0 1px 0 hsl(var(--black) / .04),
-        0 0 5px hsl(var(--white) / .15);
-    }
-
-    u > svg {
-      max-inline-size: 100%;
-      block-size: auto;
-
-      font-family: var(--font-primary);
-      font-weight: 700;
-      line-height: 1.1;
-      will-change: transform;
-      transform: rotate(0) scale(1.25);
-      animation: spinAroundAxle 7s linear infinite forwards;
-      filter: drop-shadow(0 3px 6px var(--accent-shade));
-
-      & > text {
-        font-feature-settings: 'case' 1;
-        text-transform: uppercase;
-        stroke: var(--accent-shade);
-        fill: currentcolor;
-        color: var(--accent-extra);
-
-        [data-theme-style=light] & { color: var(--accent); }
-      }
-    }
   }
 
-  & > ul {
-    display: none;
-    place-self: center;
+  time {
+    font-size: inherit;
+    font-weight: 500;
+    font-style: normal;
+    color: inherit;
+    text-shadow:
+      0 1px 0 hsl(var(--black) / .04),
+      0 0 5px hsl(var(--white) / .15);
+  }
 
-    &:nth-of-type(1),
-    &:nth-of-type(2) { grid-template-columns: repeat(2, 1fr); }
+  u > svg {
+    max-inline-size: 100%;
+    block-size: auto;
+
+    font-family: var(--font-primary);
+    font-weight: 700;
+    line-height: 1.1;
+    will-change: transform;
+    transform: rotate(0) scale(1.25);
+    animation: spinAroundAxle 7s linear infinite forwards;
+    filter: drop-shadow(0 3px 6px var(--accent-shade));
+
+    & > text {
+      font-feature-settings: 'case' 1;
+      text-transform: uppercase;
+      stroke: var(--accent-shade);
+      fill: currentcolor;
+      color: var(--accent-extra);
+
+      [data-theme-style=light] & { color: var(--accent); }
+    }
   }
 }
 
 @keyframes spinAroundAxle {
   from { transform: rotate(360deg) scale(1.25); }
-}
-
-@include config.respond('tablet') {
-  .widget {
-    inset-inline-end: unset;
-    inset-inline-start: 0; }
-  .widget ul { display: grid; }
 }
