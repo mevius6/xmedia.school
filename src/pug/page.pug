@@ -51,8 +51,7 @@ html(class="no-js" dir="ltr" lang="ru")
     )
       //- https://parceljs.org/languages/html/#json-ld
       //- include ./_microdata
-
-      //- if page.id === 'index'
+      //-
         .a2hs.hidden
           +cta({
             base: 'a2hs',
@@ -60,6 +59,9 @@ html(class="no-js" dir="ltr" lang="ru")
             text: 'Установить'
           })
       block content
+
+      include ./pug/_footer
+      include ./pug/_svg-filters
 
     block scripts
     prepend scripts
