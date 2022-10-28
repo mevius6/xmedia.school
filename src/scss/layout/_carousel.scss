@@ -1,0 +1,567 @@
+@use '../config';
+
+/* REFS
+    → https://web.dev/building-a-stories-component/
+    → https://gui-challenges.web.app/carousel/dist/
+    → https://github.com/argyleink/gui-challenges/tree/main/carousel
+    → http://youmightnotneedjs.com/#image_slider
+    → https://github.com/benschwarz/gallery-css/blob/master/sass/_gallery.scss
+*/
+
+$slide-width: 100%;
+
+.carousel {
+  $init: &;
+  $instance1: #{&}--1; // <-- works (1st reel)
+  $instance2: #{&}--2; // <-- works (2nd reel)
+  $instance3: #{&}--3; // <-- reviews/testimonials
+
+  --tap-size: 2.75rem;
+  --carousel-item-size: 80%; // 100%
+  --carousel-gutters:
+    max(var(--tap-size), calc((100% - var(--carousel-item-size)) / 2));
+    //= max(2.75rem, 10%)
+  --carousel-gutters: var(--tap-size);
+  --negative-gutters: calc(-1 * var(--carousel-gutters));
+  --carousel-scrollbar-gutter: var(--spacer-3x);
+  --carousel-pagination-size: var(--spacer-2x);
+
+  position: relative;
+  block-size: 100%;
+  max-inline-size: 100%;
+  // overflow: hidden;
+
+  display: grid;
+  grid-template-columns:
+    [carousel-gutter] var(--carousel-gutters)
+    [carousel-inview] 1fr
+    [carousel-gutter] var(--carousel-gutters);
+  grid-template-rows:
+    [carousel-scroller] 1fr
+    [carousel-progress] minmax(0, var(--carousel-pagination-size));
+  grid-row-gap: var(--gutter);
+
+  &[data-pagination='none'] {
+    grid-template-rows: [carousel-scroller] 1fr;
+
+    & > .carousel__pagination { display: none; }
+  }
+
+  // Scroller
+  // https://blog.mayank.co/better-scrolling-through-modern-css
+  &__container {
+    --list-gap: 0;
+    // --carousel-gutters: 0; // <-- full-width on mobile
+
+    position: relative;
+    grid-row: 1; // <-- carousel-scroller;
+    grid-column: 1/-1;
+    display: grid;
+    grid-auto-columns: 100%;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: var(--carousel-gutters);
+    // padding-block: var(--spacer-3x) var(--carousel-scrollbar-gutter);
+    padding-inline: var(--carousel-gutters);
+
+    // Scroll-Snap <-- &:where([class*='--snap']) {…}
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--carousel-gutters);
+
+    // will-change: transform;
+    // animation: autoRotation 10s infinite;
+
+    // #{$instance3} & { --carousel-gutters: unset; }
+
+    & > * { scroll-snap-align: center; }
+  }
+
+  // a separate layer to render the ambient (or diffused) light effect
+  /* &__loop {
+    position: absolute;
+    grid-row: 1;
+    grid-column: 1/-1;
+    z-index: -1;
+    display: grid;
+    grid-auto-columns: 100%;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: inherit;
+    // padding-inline: var(--carousel-gutters);
+
+    & > [class*='slide'] {
+      // overflow: visible;
+
+      // set variables to define the sources of the image glow effect
+      #{$instance1} & { @include config.bg-images('reel1'); }
+      #{$instance2} & { @include config.bg-images('reel2'); }
+    }
+
+    & > [class*='slide']::after {
+      grid-column-start: 1;
+      aspect-ratio: 4/5;
+      max-inline-size: calc(50% - var(--gutter));
+      // transform: scale(.75);
+
+      position: absolute;
+      // inset: 0;
+      top: -2vmin;
+      left: -2vmin;
+      z-index: -1;
+      width : calc(100% + 4vmin);
+      height: calc(100% + 4vmin);
+      filter: blur(8vw);
+      background: var(--bg-image) center/cover no-repeat;
+      content: '';
+    }
+  } */
+
+  // Slide
+  & [class*='slide'],
+  &__slide {
+    position: relative;
+    // align-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    margin-block: auto;
+    grid-row-gap: var(--gutter);
+    column-gap: var(--gutter);
+    // content-visibility: auto;
+
+    #{$instance1} & { margin-block-start: 0; } // <-- top-alignment
+  }
+
+  &__image {
+    overflow: hidden;
+    margin-inline: auto;
+    position: relative;
+    // mask: linear-gradient(135deg, #000 75%, transparent);
+
+    /* &::after { // <-- debug control pos
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      height: 2.75rem;
+      background-color: slateblue;
+      transform: translatey(-50%);
+    } */
+
+    #{$instance1} li:nth-of-type(even) > & {
+      --clip: var(--clip-2);
+    }
+    // #{$instance2} li:nth-of-type(odd) > & {…}
+
+    picture { clip-path: inherit; }
+
+    img {
+      #{$instance1} & { aspect-ratio: 4 / 5; }
+      #{$instance2} & { aspect-ratio: 3 / 2; }
+    }
+  }
+
+  &__text {
+    z-index: 1;
+    place-self: center;
+    margin-inline: auto;
+    color: var(--foreground);
+    background-color: var(--trn);
+
+    #{$instance1} & {
+      padding-inline: var(--spacer);
+    }
+
+    #{$instance2} & {
+      display: flex;
+      flex-direction: column;
+
+      --flow-space: 0;
+      justify-content: space-between;
+      gap: var(--spacer-2x); // <-- instead of child's margin-block-start
+      margin-block-start: var(--spacer-3x); // <-- instead of parent's row-gap
+
+      & > * { flex: 1 1 auto; }
+
+      // rm list icons and centering content
+      & > :is(h3, ul) { margin: auto; }
+
+      // and centering content
+      & li {
+        gap: 0;
+        padding-inline-start: 0;
+
+        &::before { visibility: collapse; }
+      }
+
+      & a { margin-inline: auto; }
+    }
+  }
+
+  // TODO: scrollbar as progress bar
+  // https://ishadeed.com/article/custom-scrollbars-css/
+
+  // Next/Previous Slide Control
+  // ? https://codepen.io/aaroniker/pen/BbPpOj
+  &__control {
+    /* Flex-box implementation
+      position: absolute;
+      top: 50%;
+      left: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      inline-size: 100%;
+      transform: translateY(-50%);
+
+      // Center alignment relative to the image height
+      #{$instance1} &,
+      #{$instance2} & {
+        top: 0;
+        padding-block-start: var(--sp-x-start);
+      }
+      #{$instance1} & { --sp-x-start: calc(5 / 4 * 100%); }
+      #{$instance2} & { --sp-x-start: calc(2 / 3 * 100%); } */
+
+    display: contents;
+
+    & > * {
+      grid-row: 1;
+      place-self: center;
+      margin-block: var(--spacer-4x);
+    }
+
+    &--next,
+    &--prev {
+      --size: 2.75rem; // var(--min-touch-target-size)
+      --shadow-size: 0;
+      --shadow-highlight-light: hsl(0 0% 50% / 10%);
+      --shadow-highlight-dark: hsl(0 0% 100% / 20%);
+      --shadow-highlight: var(--shadow-highlight-light);
+
+      --on-hover-shift: .125;
+      --on-hover-color: var(--accent-extra);
+
+      padding: 0; // <-- override theme defaults
+      grid-column: var(--grid-col, 1);
+      grid-row: 1;
+      place-self: center;
+      box-shadow:
+        inset 0 0 0 var(--shadow-size) var(--shadow-highlight);
+
+      position: relative;
+      inline-size: var(--size);
+      block-size: var(--size);
+      aspect-ratio: var(--ratio-square);
+      // clip-path: var(--geometry);
+      z-index: 10;
+      overflow: hidden;
+      background-color: var(--background-a60);
+      background-image: var(--lin-grad-convex);
+      background-blend-mode: color-burn;
+      color: var(--color, var(--foreground));
+      border-radius: 50%;
+      border: none;
+      backdrop-filter: blur(7px) brightness(1.2);
+
+      &:where(:not([disabled])) {
+        transition:
+          color .2s var(--ease-out-quart),
+          filter .2s var(--ease-out-quart),
+          opacity .5s var(--ease-out-quart) .5s,
+          // transform .2s var(--ease-in-out-quart),
+          transform .25s var(--ease-spring),
+          box-shadow .2s var(--ease-in-out-quart),
+          outline-offset 145ms var(--ease-out-quart);
+      }
+
+      & :where(svg, polyline) { transition: inherit; }
+
+      &:is(:hover) { --color: var(--on-hover-color); }
+
+      &:is(:focus, :active) { --shadow-size: .25rem; }
+
+      & > svg { inline-size: 100%; }
+      & > svg circle { color: var(--accent-shade); } // <-- stroke 2px
+
+      @media (hover: hover) {
+        &:hover:not([disabled]) svg > polyline {
+          filter: drop-shadow(0 3px 6px hsl(var(--teal) / .375));
+          transform:
+            translateX(var(--tx, 0))
+            translateY(12.5%)
+            scaleY(75%);
+        }
+      }
+    }
+
+    &--next {
+      --grid-col: 3;
+      --tx: calc(var(--on-hover-shift) * 1rem);
+      // --arrow: '\2192';
+      --geometry: var(--shape-chevron-right);
+    }
+
+    &--prev {
+      --grid-col: 1;
+      --tx: calc(-1 * var(--on-hover-shift) * 1rem);
+      // --arrow: '\2190';
+      --geometry: var(--shape-chevron-left);
+    }
+  }
+
+  &__pagination {
+    // grid-row: 2;
+    grid-column: 1/-1;
+    place-self: center;
+
+    display: grid;
+    grid-auto-flow: column;
+    gap: var(--spacer);
+
+    max-inline-size: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    overflow: visible;
+
+    // padding-block: var(--spacer);
+    // padding-inline: var(--spacer-3x);
+
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    [carousel-pagination='gallery'] & {
+      margin-block-end: 0;
+    }
+
+    & > [aria-selected='true'] {
+      background: var(--accent-extra);
+      filter: drop-shadow(0 3px 6px hsl(var(--teal) / .375));
+    }
+
+    & > [aria-selected='false'] {
+      transform: scale(.75);
+    }
+
+    & > button {
+      min-block-size: 1rem;  min-inline-size: 1rem; // override
+      inline-size: 1rem;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background-color: var(--accent-shade);
+
+      :where([class*='--gallery']) & {
+        border-radius: var(--radius-2);
+        border: none;
+        background-origin: border-box;
+        background-size: cover;
+      }
+    }
+  }
+
+  &__counter {
+    // --px-size: 24; <-- too small to display fractions
+    --px-size: 32; //= 2rem
+
+    // position: absolute;
+    // inset-block-start: 0;
+    // inset-inline-start: 0;
+    grid-row: 1;
+    place-self: start center;
+    z-index: 2;
+    margin-block: var(--spacer-4x); // <-- the same as the sideway text
+
+    font-weight: 700;
+    line-height: 1.1;
+    line-height: calc(36 / 16 * 1rem); //= 2.25rem
+    color: var(--foreground-a80);
+    font-variant-numeric:
+      oldstyle-nums
+      tabular-nums
+      diagonal-fractions; // stacked-fractions
+    font-feature-settings:
+      'onum' 1,
+      'tnum' 1,
+      'frac' 1; // 'afrc' 1
+
+    filter: drop-shadow(0 3px 6px var(--foreground-a25));
+
+    :where(#{$instance1}) & {
+      grid-column: 3;
+      padding-inline-end: var(--spacer-2x);
+    }
+
+    :where(#{$instance3}) & {
+      grid-column: 1;
+      padding-inline-start: var(--spacer-2x);
+    }
+  }
+
+  @include config.respond('tablet') {
+    &__container {
+      #{$instance3} &,
+      #{$instance1} & {
+        // visually rm grid gutters
+        margin-inline-start: calc(-1 * var(--gutter));
+        // (or set props to “carousel” class)
+        // max-inline-size: calc(100% + var(--gutter));
+        // and will be equals to main grid gutter
+        padding-inline: var(--gutter);
+      }
+      #{$instance2} & {
+        max-inline-size: calc(100% + var(--carousel-gutters) * 2);
+        margin-inline: var(--negative-gutters);
+      }
+    }
+
+    & [class*='slide'],
+    &__slide {
+      grid-template-columns: repeat(var(--columns), 1fr);
+
+      #{$instance1} & { margin-block-start: auto; } // <-- centering
+      #{$instance2} & > * { grid-area: 1 / 1; }
+    }
+
+    &__text {
+      inline-size: 100%; // override
+      padding-block: var(--spacer-6x);
+
+      #{$instance3} & {
+        padding-inline: 2ch;
+      }
+
+      #{$instance2} & {
+        --flow-space: 0; // <-- reset top-indent
+
+        gap: var(--gutter);
+        padding-block: var(--spacer-2x);
+        padding-inline: 2ch;
+        backdrop-filter: var(--smooth-glass);
+        background-color: var(--background-a25); // ? a60
+        align-self: end;
+
+        flex-direction: initial;
+        justify-self: start;
+        flex-flow: row wrap;
+        align-items: center;
+        // justify-content: center;
+
+        [data-theme-style=light] & {
+          background-image: var(--lin-grad-convex);
+        }
+
+        & > * { flex: 1; }
+
+        & a { margin-inline-start: unset; }
+
+        &:where(figcaption) {
+          position: absolute;
+          inset-block-end: 0;
+          // padding-block-start: var(--spacer);
+        }
+      }
+    }
+
+    // &__control > *,
+    &__counter {
+      #{$instance1} & {
+        margin-inline-end: calc(var(--gutter)*2);
+      }
+    }
+
+    &__control {
+      #{$instance3} &,
+      #{$instance1} & {
+        & > * {
+          --grid-col: 3;
+          align-self: end;
+        }
+
+        & > button:nth-child(1) {
+          inset-inline-end: calc(var(--gutter) + 2.75rem + 2.75rem * 0.5);
+        }
+
+        & > button:nth-child(2) {
+          inset-inline-end: 0;
+          margin-inline-end: calc(var(--gutter)*2);
+        }
+      }
+    }
+
+    &__counter {
+      padding-inline: unset;
+      mix-blend-mode: color-dodge;
+    }
+  }
+
+  @media (max-width: 480px) {
+    & { padding-inline: var(--spacer-2x); }
+
+    &__text {
+      #{$instance3} & {
+        margin-inline: calc(-1 * var(--spacer-2x));
+        blockquote { padding-inline: var(--spacer-2x); }
+      }
+    }
+
+    &__control {
+      position: absolute;
+      z-index: 1;
+      grid-row: 2;
+      grid-column: 1;
+      left: 0;
+    }
+
+    &__counter {
+      #{$instance3} & {
+        position: absolute;
+        top: 0;
+        right: var(--spacer-2x);
+        margin: 0;
+        padding: 0;
+        transform: translatey(-100%);
+      }
+    }
+  }
+
+  @media (max-width: 320px) {
+    --carousel-gutters: 0;
+
+    &__text {
+      #{$instance3} & {
+        blockquote { margin-inline: 2ch; }
+      }
+    }
+    &__counter {
+      #{$instance3} & { transform: translatey(-100%) }
+    }
+    &__control {
+      #{$instance3} & { display: none; }
+    }
+  }
+}
+
+@keyframes gui-carousel--control-keypress {
+  0%  { outline-offset: 5px }
+  50% { outline-offset: 0; }
+}
+
+@keyframes carousel-scrollstart {
+  from { scroll-snap-align: center }
+  to   { scroll-snap-align: unset }
+}
+
+// TODO: implement ↓
+@keyframes autoRotation {
+  0% { transform: translateX(0); }
+  33% { transform: translateX(-$slide-width); }
+  66% { transform: translateX(-$slide-width*2); }
+  100% { transform: translateX(0); }
+}

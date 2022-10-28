@@ -1,0 +1,83 @@
+//- Useful sections of Parcel's documentation which describe the processing for:
+  - CSS `url()` function → https://parceljs.org/languages/css/#url()
+  - Dependency specifiers → https://parceljs.org/features/dependency-resolution/
+  - Image files → https://parceljs.org/recipes/image/
+
+mixin picture(props)
+  -
+    let {
+      assetPrefix = SRC, // <-- same as dirName
+      sourcePath = 'images', // <-- same as baseName or basePath
+      sourceName = 'img',
+      base = sourcePath ?? '',
+      path: sub = '', // <-- sub-directory
+      name = '',
+      desc, title,
+      hdim: w,
+      vdim: h,
+      format: ext = 'jpg', // <-- filename extension
+      cors = ANON ?? '',
+      policy = STRICTER ?? '',
+      placeholder, //= true ?? !name,
+      thumbnail: thumb,
+      ...rest // <-- e.g. class
+    } = props
+  -
+    // Define path segments
+    let pathInfo = `${base}${SEP}${sub}`
+    let fileName = `${name}${DOT}${ext}`
+  -
+    // Merge path segments to the relative or full path
+    // i.e., location relative to the current or root file's directory
+    let relativePathname = `${CURR}${pathInfo}${SEP}${fileName}`
+    let absolutePathname = `${ROOT}${SRC}${pathInfo}${SEP}${fileName}`
+    // Aliases
+    let relPath = relativePathname,
+        absPath = absolutePathname
+  -
+    let path = relPath ?? isRelative(relPath)
+  -
+    let srcAsPerFormat = (suffix) => CURR
+      + pathInfo
+      + SEP
+      + name
+      + DOT
+      + suffix
+  -
+    let subtypes = ['webp'] // ['avif', 'webp', 'jpeg']
+    let classes = []
+  -
+    let bgImage = { '--bg-image': `url(${absPath ?? name})` }
+    let styles = {
+      // ...bgImage,
+    }
+
+  picture.image-wrapper(
+    class= classes class= [props.class]
+    style= styles
+  )
+    //- if !placeholder
+    each subtype of subtypes
+      source(
+        type=`image/${subtype}`
+        srcset= srcAsPerFormat(subtype))
+    img(
+      src= !name || placeholder ? generatePlaceholderImage(1, {
+        width: w,
+        height: (h || w),
+        style: 'tiles'
+      }) : path
+      alt= desc
+      width= w height= (h || w)
+      crossOrigin= cors
+      referrerPolicy= policy
+      fetchPriority= (placeholder
+        ? 'high'
+        : 'auto')
+      decoding= (placeholder
+        ? 'auto'
+        : 'async')
+      loading= (placeholder
+        ? 'eager'
+        : 'lazy')
+      )&attributes({ title: title ?? desc })

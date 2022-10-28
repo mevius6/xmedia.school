@@ -1,0 +1,10 @@
+header.page__header(itemscope itemtype="https://schema.org/WPHeader")
+  a.logo(href="./")
+    //- include ../images/logo.svg
+    +placeholder({
+      type: 'gradient',
+      text: data.meta.brand
+    })
+  ul
+    li: include ./_nav
+    li: theme-switch

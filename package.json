@@ -1,0 +1,66 @@
+{
+  "name": "xmedia.school",
+  "version": "1.0.0",
+  "description": "",
+  "browserslist": "> 0.5%, last 2 versions, not dead, not op_mini all",
+  "config": {
+    "repo": "https://github.com/mevius6/${npm_package_name}",
+    "port": {
+      "http": 8080,
+      "https": 8443
+    }
+  },
+  "engines": {
+    "node": ">=16.x.x"
+  },
+  "scripts": {
+    "parcel:start": "parcel src/index.pug --dist-dir ./public --no-cache --cert $(grep '^CERT_PATH' .env | cut -d '=' -f2) --key $(grep '^KEY_PATH' .env | cut -d '=' -f2) -p $npm_package_config_port_https --open",
+    "parcel:build": "npm run clear && parcel build src/index.pug --dist-dir ./public --no-source-maps --no-cache && npm run copy",
+    "re:start": "npm run clear && npm run parcel:start",
+    "clear": "rm -rf public && rm -rf .parcel-cache",
+    "lint:js": "npx eslint \"./src/js/*.js\" --fix",
+    "lint:css": "npx stylelint \"./src/scss/**/*.{css,scss}\" --fix",
+    "lint": "npm run lint:js && npm run lint:css",
+    "copy": "cp -r src/static/* ./public",
+    "report": "PARCEL_BUNDLE_ANALYZER=1 parcel build src/index.pug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mevius6/xmedia.school.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mevius6/xmedia.school/issues"
+  },
+  "homepage": "https://github.com/mevius6/xmedia.school#readme",
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.6.2",
+    "@parcel/transformer-css": "^2.7.0",
+    "@parcel/transformer-pug": "^2.6.2",
+    "@parcel/transformer-sass": "^2.6.2",
+    "@parcel/transformer-webmanifest": "^2.6.2",
+    "buffer": "^6.0.3",
+    "eslint": "^8.21.0",
+    "events": "^3.3.0",
+    "parcel": "^2.6.2",
+    "process": "^0.11.10",
+    "pug": "^3.0.2",
+    "sass": "^1.54.0",
+    "stylelint": "^14.9.1",
+    "stylelint-order": "^5.0.0"
+  },
+  "dependencies": {
+    "gsap": "^3.10.4",
+    "splitting": "^1.0.6"
+  },
+  "@parcel/transformer-css": {
+    "drafts": {
+      "nesting": true,
+      "customMedia": true
+    },
+    "pseudoClasses": {
+      "focusVisible": "focus-ring"
+    }
+  }
+}

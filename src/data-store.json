@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "brand": "X-Media School",
+    "domain": "https://www.xmedia.school",
+    "email": "info@xmedia.school",
+    "phone": "",
+    "keywords": "авторский курс,профессия продюсер,tayat production",
+    "name": "Профессия «Продюсер»"
+  },
+  "pages": {
+    "index": {
+      "description": "",
+      "id": "index",
+      "keywords": "",
+      "path": "/",
+      "title": ["", ""]
+    },
+    "agenda": {
+      "description": "",
+      "id": "index",
+      "keywords": "",
+      "path": ["/agenda.pug", "./agenda"],
+      "title": ["Расписание занятий", ""]
+    },
+    "privacy": {
+      "id": "privacy",
+      "path": ["./privacy.pug", "/privacy"],
+      "title": [
+        "Конфиденциальность",
+        ""
+      ],
+      "description": "Политика обработки персональных данных",
+      "keywords": ""
+    },
+    "offer": {
+      "id": "offer",
+      "path": ["./offer.pug", "/offer"],
+      "title": [
+        "Конфиденциальность",
+        ""
+      ],
+      "description": "Политика обработки персональных данных",
+      "keywords": ""
+    }
+  },
+  "tech": [
+    "HTML","CSS",
+    "Pug","SCSS",
+    "JavaScript",
+    "NodeJS",
+    "Parcel",
+    "Vercel",
+    "VSCode"
+  ]
+}

@@ -1,1 +1,1 @@
-# xmedia.school
+# Cross Media School

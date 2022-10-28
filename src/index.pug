@@ -1,0 +1,236 @@
+extends ./pug/page
+
+block vars
+  - let page = data.pages.index
+
+block content
+  section.grid
+    .container.bg-overlay#hero(
+      data-id="hero"
+    )
+      //- video-player.grid__full(basename="page-hero")
+      noscript: +video({ fileName: 'hero', dims: [1920, 1080] })
+      article.flow.grid__start-half.mask-border-gradient&attributes({
+        'data-backdrop': 'glassy'
+      })
+        h1.title(itemprop="name")
+          span.outline-stroke.stroke.stroke-gradient
+            | #{intro.head[0]}#[br]
+          span= intro.head[1]
+        p(role="subtitle")= intro.body
+        +cta({
+          type: 'anchor',
+          link: '#contact',
+          text: 'Записаться'
+        })(data-js-anim='bg-gradient')
+
+    .container.spaced.--ada-lg#expert(
+      data-id="expert"
+    )
+      +picture({
+        class: ['grid__start-half', 'fx-bloom'],
+        name: 'expert',
+        desc: '',
+        hdim: 1024,
+        format: 'png'
+      })
+      article.flow.grid__end-half
+        +head({ level: 2, text: expert.name, reveal: 'chars' })
+        each line in expert.cv
+          p= line
+
+    .container.spaced.--lg#reel1(
+      data-id="works"
+    )
+      .grid__asym-lhs.sideways
+        +head({ level: 2, text: 'Производство TAYAT', reveal: 'chars' })
+      .grid__asym-rhs
+        //- H2F: “class” prop will no longer be iterable if this is removed
+        +carousel({
+          class: [],
+          data: slides1,
+          imageDims: 1350 / 1080,
+          imagePath: 'reel1',
+          instance: 1,
+          pagination: false,
+          slideCols: 2,
+          textWrap: 'article',
+        })
+
+    .container.spaced.--ada-lg#benefits(
+      data-id="popout"
+    )
+      .grid__start-half
+        +head({ level: 2, text: 'Кому будет полезен курс?', reveal: 'chars' })
+      .grid__end-half
+        +list({ class: ['angled-corners'], items: benefits, icon: RARR })
+
+    .container(data-id="ticker")
+      +marquee({
+        iter: 4,
+        text: `2 месяца ${BULL} 7 занятий ${BULL} 1 раз в неделю ${BULL}`
+      })
+
+    .container.spaced.--ada-lg#outline(
+      data-id="outline"
+    )
+      .grid__center
+        +head({ level: 2, text: 'Что вас ждёт?', reveal: 'chars' })
+        //- +head({ level: 2, text: 'Что будет на курсе?' })
+      .grid__content
+        article.flow.xcol(style={ '--col-w': 24 })
+          each line in outline
+            p= line
+          span.dinkus
+          +list({ items: speakers })
+      .grid__center
+        +cta({
+          type: 'anchor',
+          link: 'agenda',
+          text: 'Посмотреть программу'
+        })(data-js-anim='bg-gradient')
+
+    .container(data-id="ticker")
+      +marquee({
+        iter: 4,
+        text: `Старт 3 ноября ${BULL} Стоимость 40 000 ₽ ${BULL}`,
+        animDir: 'reverse'
+      })
+
+    .container.spaced.--ada-lg#upskills(
+      data-id="popout"
+    )
+      .grid__start-half
+        +head({ level: 2, text: 'Чему вы научитесь?', reveal: 'chars' })
+      .grid__end-half
+        +list({
+          class: 'angled-corners',
+          items: upskills,
+          icon: RARR,
+          reveal: true
+        })
+
+    .container.spaced.--ada-md#reel2(
+      data-id="works"
+    )
+      +carousel({
+        class: ['grid__content'],
+        data: slides2,
+        imageDims: 720 / 1080,
+        imagePath: 'reel2',
+        instance: 2,
+        counter: false,
+        pagination: true,
+        textWrap: 'caption',
+      })
+
+    .container.spaced.--ada-lg#format(
+      data-id="popout"
+    )
+      .grid__start-half
+        +head({ level: 2, text: 'Формат обучения', reveal: 'chars' })
+      .grid__end-half
+        p.body.angled-corners
+          | Вы можете выбрать офлайн #[i или] онлайн формат. Все встречи проходят в
+          |
+          +link({
+            text: 'Apollo Studios Moscow',
+            href: 'https://apollostudios.ru/'
+          })
+          |
+          | с трансляцией в Zoom. При желании можно приехать на одно из занятий или финальный просмотр из другого города, чтобы познакомиться с ведущей курса и остальной группой.
+
+    //- .container.spaced.--lg#agenda(data-id="agenda")
+      .grid__asym-lhs.sideways.sticky
+        +head({ level: 2, text: 'Расписание занятий', reveal: 'chars' })
+      article.grid__asym-rhs.flow.spaced.--ada-md.scroll-shadows
+        +list({
+          items: agenda,
+          ordered: true,
+          nestedListOrdered: true
+        })
+
+    .container.spaced.--lg#reviews(
+      data-id="reviews"
+    )
+      .grid__asym-lhs.sideways
+        +head({ level: 2, text: 'Отзывы студентов', reveal: 'chars' })
+      .grid__asym-rhs
+        p.overline(
+          itemprop="aggregateRating"
+          itemscope itemtype="https://schema.org/AggregateRating"
+          data-hidden
+        )
+          | #[span(itemprop="ratingValue")= 5] из 5 звёзд —
+          | #[span(itemprop="reviewCount")= count(reviews)] отзывов на
+          | #[+link({href: 'https://xmedia.school', text: 'XMEDIA'})]
+        +carousel({
+          class: [],
+          data: reviews,
+          type: 'review',
+          instance: 3,
+          pagination: false,
+        })
+
+    .container.spaced.--ada-md#contact(
+      data-id="contact"
+    )
+      .grid__center: +head({ level: 2, text: 'Подать заявку', reveal: 'chars' })
+      +form({
+        class: 'grid__center',
+        endpoint: '9239c924',
+        phone: '+7 (NNN) NNN–NN–NN',
+        recaptcha: true
+      })
+      //- +form({ offer: data.pages.offer.path[0] })
+      .meta.grid__content
+        .flow
+          +unorderedList('Контакты')
+            li
+              //- | Фактический адрес: #{meta.adds[0]}
+              | Фактический адрес:#[br]
+              | #{meta.adds[0]}
+            li
+              | Электронная почта:
+              |
+              +link({
+                email: {
+                  to: data.meta.email,
+                  subject: '…',
+                  body: '…'
+                }
+              })
+            li
+              | Телефон:
+              |
+              +link({ phone: meta.phone })
+        .flow
+          +unorderedList('Реквизиты')
+            li= meta.trader
+            li= meta.number
+        .flow
+          +unorderedList('Платёжные системы')
+            li: include ./images/ma-logo.svg
+
+  //- .admission
+  include ./pug/_footer
+
+  //- svg(height="0" width="0")
+    defs
+      clipPath#cross
+        rect(y="110" x="137" width="90" height="90")
+        rect(x="0" y="110" width="90" height="90")
+        rect(x="137" y="0" width="90" height="90")
+        rect(x="0" y="0" width="90" height="90")
+  //- svg(width="100px" height="100px")
+    defs
+      clipPath#clipx
+        polygon(
+          points="20,0 0,20 30,50
+                  0,80 20,100 50,70
+                  80,100 100,80 70,50 100,20
+                  80 0, 50 30")
+
+  include ./pug/_svg-filters
+
+block scripts

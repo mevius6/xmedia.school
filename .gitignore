@@ -1,0 +1,11 @@
+.DS_*
+.env
+.parcel-cache/
+.vercel/
+.vscode/
+node_modules/
+puplic/
+parcel-bundle-reports/
+
+src/css/
+.vercel

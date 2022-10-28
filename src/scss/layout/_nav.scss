@@ -1,0 +1,315 @@
+@use '../config';
+
+@mixin menuDisclosure($selector) {
+  // https://drafts.csswg.org/css-flexbox-1/#visibility-collapse
+  --menu-box: visible;
+  visibility: var(--menu-box);
+  opacity: var(--menu-alpha, 0);
+
+  // Disclosure the navigation by changing the maximum height value
+  min-block-size: 0;
+  max-block-size: var(--menu-max-vdim, 0); // max-height
+  block-size: auto;
+  overflow: hidden;
+  transition: opacity 300ms ease-in, max-block-size 250ms 50ms linear;
+
+  :is(#{$selector}) {
+    --menu-alpha: 1;
+    --menu-max-vdim: 33vmax;
+
+    will-change: opacity, max-block-size;
+    transition: opacity 300ms ease-out, max-block-size 150ms linear;
+  }
+}
+
+header,
+nav { width: auto; }
+
+nav :is(ul,li) { gap: 0; } // ! override
+
+nav .hamburger {
+  --hue: 320;
+
+  display: flex;
+  place-items: center;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  // background: ;
+  border: 1px solid hsl(var(--hue) 20% 80%);
+  border-radius: 50%;
+
+  svg > line {
+    stroke: hsl(var(--hue) 100% 60%);
+    stroke-width: 5px;
+    stroke-linecap: round;
+  }
+}
+
+:root { --speed: 150ms; } // 250ms
+
+.line {
+  --size: 0.25em;
+
+  position: absolute;
+  top: 50%;
+  width: 50%;
+  height: var(--size);
+  border-radius: 0.25em;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &--a { --top: 33%; }
+  &--b { --top: 50%; }
+  &--c { --top: 67%; }
+  &--a,
+  &--b,
+  &--c {
+    width: 50%;
+    top: var(--top);
+    transition:
+      width var(--speed) calc(var(--speed) * 2),
+      top var(--speed) var(--speed);
+
+    .on & {
+      width: var(--size);
+      top: 50%;
+      transition: width var(--speed) 0s, top var(--speed) var(--speed);
+    }
+  }
+
+  &--d { --deg: 45deg; }
+  &--e { --deg: -45deg; }
+  &--d,
+  &--e {
+    width: var(--size);
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(var(--deg));
+    transition: width var(--speed) 0s;
+
+    .on & {
+      width: 50%;
+      transition: width var(--speed) calc(var(--speed) * 2);
+    }
+  }
+}
+
+// MainNav
+.nav {
+  --nav-offset: 100%;
+  --nav-cross-space: var(--spacer); // 1ex
+
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  :where([class*='elevated']) & {
+    --nav-offset: calc(100% + var(--spacer-2x) / 2);
+  }
+
+  // MainNav__Toggle
+  &__toggle {
+    display: none;
+    box-shadow: none !important;
+    position: relative;
+
+    transition: all 0.25s;
+
+    .line { background-color: var(--foreground); }
+
+    @media (max-width: 480px) {
+      --size: var(--min-touch-target-size);
+
+      display: inline-block;
+      inline-size: var(--size);
+      block-size: var(--size);
+      color: var(--accent);
+      background-color: transparent;
+      appearance: none;
+    }
+  }
+
+  // MainNav__Menu
+  &__items {
+    display: flex;
+    flex-wrap: nowrap; // RWD
+    align-items: stretch;
+    justify-content: space-evenly;
+
+    @media (max-width: 480px) {
+      flex-direction: var(--flex-axis, column);
+      align-items: flex-start;
+
+      // row-gap: var(--nav-cross-space);
+      padding-inline: var(--min-touch-target-size);
+      padding-block: var(--nav-cross-space);
+      border-block-start: 1px solid var(--foreground-a25);
+
+      position: absolute;
+      inset-block-start: var(--nav-offset);
+      inset-inline: 0;
+      backdrop-filter: var(--menu-backdrop, var(--smooth-glass));
+      background-color: var(--background-a50);
+
+      @include menuDisclosure(
+        "header:not([class*='--hidden'])) &:where([class*='is-active']"
+      )
+    }
+  }
+
+  // MainNav__MenuItem
+  &__item {
+    --r: var(--radius-2);
+
+    position: relative;
+    z-index: var(--zi);
+    display: flex;
+    flex: 1 1 auto; // RWD
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding-inline: 1ch;
+    background-color: var(--item-bg-color, unset);
+
+    // &:first-child { border-radius: var(--r) var(--r) 0 0; }
+    // &:last-child { border-radius: 0 0 var(--r) var(--r); }
+
+    & > * { flex: 1 1 auto; }
+  }
+
+  // MainNav__MenuToggle
+  &__item > button {
+    --size: 1rem;
+
+    display: flex;
+    flex: 0 0 var(--size);
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size);
+    block-size: var(--size);
+    padding: 0;
+    margin-inline-end: var(--denser);
+    text-align: center;
+    background-color: transparent;
+    outline: none;
+
+    &[aria-expanded='true'] svg {
+      transform: rotate(180deg); // scale(-1);
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+    padding-block: var(--nav-cross-space);
+    margin: auto;
+    line-height: 1.5;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.25px;
+    opacity: var(--alpha, 1);
+
+    & + button svg {
+      inline-size: 100%;
+      block-size: 100%;
+      fill: var(--accent);
+      transition: transform 250ms ease-in;
+      transform-origin: center 45%;
+    }
+  }
+
+  // &__link-text {…} // <-- nav>ul>li>a>span
+
+  // MainNav__SubMenu
+  &__subitems {
+    --flow-space: 0;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1020;
+    display: block;
+    width: 100%;
+    min-width: 12em;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 2px 8px hsl(var(--black) / 0.5));
+    border: 1px solid transparent;
+
+    a {
+      display: block;
+      padding: 1ch 2ex;
+      margin: 0;
+      font-size: 0.75rem;
+    }
+
+    span { margin: 0; }
+  }
+
+  // MainNav__SubMenuItem
+  &__subitem {
+    --r: var(--radius-1);
+    --speed: 200ms;
+    --delay: calc(var(--i, 0) * var(--speed));
+
+    // background-color: var(--background-a95);
+    opacity: 1;
+    transform: translate(0);
+    animation: fadeInBottom var(--speed) ease-out var(--delay) both;
+
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) { --i: #{$i * 0.25}; }
+    }
+
+    &:first-child { border-radius: var(--r) var(--r) 0 0; }
+    &:last-child { border-radius: 0 0 var(--r) var(--r); }
+  }
+
+  @include config.respond('tablet') {
+    &__items {
+      & > * + * {
+        border-inline-start: 1px solid var(--foreground-a25);
+      }
+    }
+
+    &__item {
+      &:first-child,
+      &:last-child { --r: inherit; }
+
+      opacity: var(--a, 1);
+      transition: opacity 150ms ease-in-out;
+
+      @media(hover: hover) and (pointer: fine) {
+        // https://drafts.csswg.org/selectors-4/#negation
+        // :hover > &:where(:not(:hover)) { --a: .75 }
+        :is(:hover, :focus-within) > &:not(:hover) { --a: 0.5; }
+      }
+    }
+
+    &__subitems {
+      top: var(--nav-offset);
+      width: auto;
+    }
+  }
+
+  @include config.respond('laptop') {
+    &__items {
+      flex-wrap: wrap; // RWD
+    }
+
+    &__item:last-child > ul {
+      right: 0;
+      left: auto;
+    }
+
+    &__subitems { right: 0; }
+  }
+}
+
+@keyframes fadeInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}

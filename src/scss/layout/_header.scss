@@ -1,0 +1,137 @@
+@use '../config';
+
+@keyframes clipToPlus {
+  to { clip-path: var(--shape-plus); }
+}
+
+@keyframes clipToCross {
+  to { clip-path: var(--shape-cross); }
+}
+
+@keyframes logoAnim {
+  0% { clip-path: var(--shape-cross); }
+  100% { clip-path: var(--shape-plus); }
+  // 100% { clip-path: var(--shape-blinds); }
+}
+
+.page__header {
+  --zi: 1010;
+  --header-cross-flow: var(--spacer-2x);
+  --header-cross-size: calc(100% - var(--spacer-2x) * 2);
+  --header-block-size: min-content;
+
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--zi);
+  margin-inline: var(--header-cross-flow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  inline-size: var(--header-cross-size);
+  block-size: var(--header-block-size);
+  background-color: var(--background-a50);
+  backdrop-filter: var(--smooth-glass);
+  filter: drop-shadow(0 12px 28px var(--shadow)); // for nav__items
+  transition:
+    transform 500ms var(--ease-out-cubic),
+    opacity 500ms var(--ease-out-cubic);
+  transform: translateY(var(--ty, 0));
+
+  &--elevated {
+    --offset: calc(var(--gutter) / 2);
+    --ty: calc(-100% - var(--offset));
+
+    inset-block-start: var(--offset, 0);
+    max-inline-size: calc(100vw - var(--gutter) * 2);
+  }
+
+  &--hidden {
+    --ty: -100%;
+    opacity: 0;
+    will-change: transform, opacity;
+    transition:
+      transform 500ms var(--ease-out-cubic),
+      opacity 500ms var(--ease-in-cubic);
+  }
+
+  & > ul {
+    grid-template-columns: 1fr auto;
+    place-items: center;
+    column-gap: var(--spacer-2x); // ! override
+  }
+
+  & > .logo {
+    --grad-color-stop1: hsl(var(--orange));
+    --grad-color-stop2: hsl(var(--pink));
+
+    display: flex;
+    flex-flow: column;
+    aspect-ratio: 1;
+    inline-size: 1.25rem; //= --theme-switch-icon-size
+    block-size: 1.25rem;
+    margin: 1ch;
+    // filter: drop-shadow(0 3px 6px var(--accent-a50));
+    overflow: visible;
+
+    & > picture {
+      // https://drafts.fxtf.org/css-masking-1/#clipping-paths
+      // https://drafts.fxtf.org/css-masking-1/#the-clip-path
+      // transition: clip-path 400ms ease-out;
+      clip-path: var(--cp, var(--shape-plus));
+      clip-path: var(--shape-plus);
+
+      // animation: logoAnim 400ms infinite alternate-reverse both;
+      animation-name: logoAnim;
+      animation-duration: 800ms;
+      animation-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+      animation-delay: 0;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      animation-fill-mode: forwards;
+    }
+
+    // &:hover > picture { --cp: var(--shape-cross); }
+  }
+
+  @include config.respond('tablet') {
+    --header-cross-flow: unset;
+    --header-cross-size: 100vw;
+  }
+}
+
+theme-switch {
+  // --theme-switch-icon-filter: saturate(.75);
+  margin-inline-end: var(--spacer-2x);
+}
+
+header > .logo {
+  & {
+    filter: saturate(.75);
+    // drop-shadow(0 3px 6px var(--foreground-a25));
+  }
+  &:hover {
+    filter: saturate(1.375);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    // width: 100%;
+    // height: 100%;
+
+    background: var(--lin-grad-4-color);
+    mix-blend-mode: soft-light; // plus-lighter;
+    filter: blur(15px) saturate(.75);
+
+    will-change: opacity, transform;
+    opacity: var(--a, .5);
+    transform: scale(var(--s, .75)) translateY(15%);
+    transition-property: opacity, transform;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover::before { --a: .75; --s: .95; }
+}

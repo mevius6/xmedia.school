@@ -1,0 +1,28 @@
+mixin text(text)
+  if Array.isArray(text)
+    each line of text
+      span= line
+      |
+      |
+    //- OR
+      = line
+      | #[br]
+  else
+    = text
+
+mixin head(props)
+  -
+    let { level: lvl=2, text: txt='', class: cls='', reveal=false } = props
+    let classes = ['headline']
+
+  if lvl==2
+    if reveal
+      - classes.push('reveal')
+      .reveal-wrapper
+        h2(class= classes class= [cls] data-splitting= reveal)
+          +text(txt)
+    else
+      h2(class= classes class= [cls]): +text(txt)
+
+  if lvl==3
+    h3(class= classes class= [cls]): +text(txt)

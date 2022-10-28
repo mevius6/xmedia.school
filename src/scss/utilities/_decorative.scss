@@ -1,0 +1,508 @@
+@use '../config';
+
+// https://augmented-ui.com/docs/
+// https://augmented-ui.com/mixinmixer/
+// https://github.com/propjockey/augmented-ui/blob/main/augmented-ui.css#L1965
+
+// https://github.com/primer/css/tree/main/src/utilities
+
+// https://tobiasahlin.com/blog/how-to-animate-box-shadow/
+// :where(.elevated) { @include config.smooth-shadow(); }
+.box-elevated-high {
+  box-shadow:
+    0 5px 2.5px hsl(200 95% 3% / .037),
+    0 12px 6.5px hsl(200 95% 3% / .053),
+    0 22.5px 13px hsl(200 95% 3% / .065),
+    0 40.2px 24px hsl(200 95% 3% / .077),
+    0 75.2px 44px hsl(200 95% 3% / .093),
+    0 180px 80px hsl(200 95% 3% / .13);
+}
+
+// .h-divider,
+.v-divider {
+  &::before {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+
+    block-size: 100%;
+    inline-size: 1px;
+    background: var(--lin-grad-stripes);
+    content: '';
+  }
+}
+// separator…
+// https://ishadeed.com/article/use-cases-css-comparison-functions/#dynamic-line-separator
+
+// https://css-tricks.com/snippets/css/ribbon/
+// https://dev.to/this-is-learning/fully-responsive-css-folded-ribbon-11h5
+// https://www.freecodecamp.org/news/make-a-css-only-ribbon/
+// https://codepen.io/willpaige/pen/nBKPmw
+.ribbon {
+  --d: 6px; /* folded part */
+  --c: blue; /* color */
+  --f: 16px; /* ribbon font-size */
+
+  position: relative;
+  display: inline-block;
+  // margin: 20px;
+
+  &::before {
+    content: attr(data-ribbon);
+    position: absolute;
+    font-family: sans-serif;
+    font-size: var(--f);
+    top: 0;
+    right: 0;
+    transform: translate(29.29%, -100%) rotate(45deg);
+    color: #fff;
+    text-align: center;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    transform-origin: bottom left;
+    padding: 5px 35px calc(var(--d) + 5px);
+    background:
+      linear-gradient(hsl(0 0% 0% / .5) 0 0)
+      bottom/100% var(--d) no-repeat var(--c);
+    background-clip: padding-box;
+    clip-path:
+      polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        calc(100% - var(--d)) calc(100% - var(--d)),
+        var(--d) calc(100% - var(--d)),
+        0 100%
+      );
+    -webkit-mask:
+      linear-gradient(
+        135deg,
+        transparent calc(50% - var(--d) * 0.707),
+        #fff 0
+      ) bottom left,
+      linear-gradient(
+        -135deg,
+        transparent calc(50% - var(--d) * 0.707),
+        #fff 0
+      )bottom right;
+    -webkit-mask-size: 300vmax 300vmax;
+    -webkit-mask-composite: destination-in, xor;
+    mask-composite: intersect;
+  }
+
+  &--left::before {
+    inset-inline: 0 auto;
+    transform: translate(-29.29%, -100%) rotate(-45deg);
+    transform-origin: bottom right;
+  }
+}
+
+/* ----------------------------- Backdrop (S)FX ----------------------------- */
+
+[data-backdrop=overlay],
+.bg-overlay {
+  &::after {
+    --overlay-color: var(--background-a60);
+
+    position: absolute;
+    inset: 0;
+    content: '';
+    background-color: var(--overlay, var(--trn));
+
+    :not([data-theme-style]) & { --overlay: var(--background-a60); }
+    [data-theme-style=light] & { --overlay: var(--background-a25); }
+    [data-theme-style=dark] & {
+      --overlay: var(--background-a80);
+      mix-blend-mode: hard-light;
+    }
+  }
+}
+
+[data-backdrop=glassy] {
+  position: relative;
+  border-radius: 2ch; // 3ch
+  backdrop-filter: blur(40px) brightness(1.2) saturate(2);
+  background-image: var(--lin-grad-convex);
+  overflow: hidden;
+
+  [data-theme-style=dark] & {
+    --lin-grad-convex:
+      linear-gradient(
+        -45deg,
+        var(--c1, hsl(0 0% 0% / 0.22)),
+        33.333%,
+        var(--c2, hsl(0 0% 0% / 0.25))
+      );
+  }
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    // width: 100%; height: 100%;
+    z-index: -1;
+    content: '';
+    // filter: url(#noiseFilter);
+
+    opacity: 0.125;
+    filter: brightness(1.25);
+    // background-color: var(--background-a25);
+    background-image: var(--lin-grad-4-color);
+    background-blend-mode: color-burn;
+  }
+}
+
+[data-backdrop=reflect] {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    background-image: var(--src);
+    background-size: cover;
+    transform:
+      translate(-50%, -50%)
+      scale(-1)
+      translate(0px, calc((100% + 0.5vmin) * -1));
+    filter: blur(4px) brightness(.75) opacity(.75);
+    overflow: hidden;
+  }
+}
+
+// ? https://github.com/una/angled-corners
+// @mixin angled-corners() {…}
+.angled-corners {
+  --clip-1: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+  --clip-2: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0px 90%);
+
+  clip-path: var(--clip, var(--clip-1));
+}
+
+// ambient light
+  // &::after {
+  //   z-index: -1;
+  //   inset: 0;
+  //   background: linear-gradient(
+  //     var(--accent),
+  //     var(--accent-shade)
+  //   );
+  //   transform: translateY(15%) scale(.85);
+  //   filter: blur(30px);
+  // }
+
+  // & picture::after {
+  //   position: absolute;
+  //   // inset: 0;
+  //   top: -2vmin;
+  //   left: -2vmin;
+  //   z-index: -1;
+  //   width : calc(100% + 4vmin);
+  //   height: calc(100% + 4vmin);
+  //   filter: blur(8vw);
+  //   background: var(--bg-image) center/cover no-repeat;
+  //   content: '';
+  //   // filter: saturate(0);
+  //   // mask: linear-gradient(135deg, #000 75%, transparent);
+  // }
+
+[data-backdrop=bloom],
+.fx-bloom {
+  --offset: 2.75rem;
+  --clip:
+    polygon(
+      0 0,
+      calc(100% - var(--offset, 0)) 0,
+      100% var(--offset, 0),
+      100% 100%,
+      var(--offset, 0) 100%,
+      0px calc(100% - var(--offset, 0))
+    );
+  position: relative;
+
+  &::after,
+  &::before {
+    content: '';
+    position: absolute;
+  }
+
+  &::before,
+  & > img { clip-path: var(--clip); }
+
+  // bloom
+  &::after {
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(
+      var(--accent),
+      var(--accent-shade)
+    );
+    transform: translateY(15%) scale(.85);
+    filter: blur(30px);
+  }
+
+  // border
+  &::before {
+    inset: -1px;
+    background-image: linear-gradient(
+      90deg,
+      var(--accent),
+      var(--accent-shade)
+    );
+  }
+}
+
+.masked {
+  --maskSize1: 24px;
+  --maskSize2: 48px;
+  --maskSize3: 64px;
+  --spotlight:
+    radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      hsl(0 0% 0%) var(--maskSize1, 0%) 0,
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize1, 0%) + 0.1%),
+      var(--trn) 0,
+      var(--trn) var(--maskSize2, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize2, 0%) + 0.1%),
+      hsl(0 0% 0%) var(--maskSize2, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) - 0.1%),
+      hsl(0 0% 0%) var(--maskSize3, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) + 0.1%),
+      var(--trn) 0
+    );
+
+  mask-image: var(--mask, var(--spotlight));
+}
+
+:where([class*='--side-fade']) {
+  @include config.side-fade();
+}
+
+// https://dev.to/codingdudecom/everything-about-stroke-text-in-css-561i
+.text-shadow-stroke {
+  @supports not (-webkit-text-stroke: #000) {
+    --stroke-color: var(--accent-extra);
+    --stroke-width: 1px;
+
+    color: var(--background);
+    text-shadow:
+      var(--stroke-width) 0 0 var(--stroke-color),
+      calc(var(--stroke-width) * -1) 0 0 var(--stroke-color),
+      0 var(--stroke-width) 0 var(--stroke-color),
+      0 calc(var(--stroke-width) * -1) 0 var(--stroke-color);
+    // text-shadow: 1px 0 0 red, 0 1px 0 red, -1px 0 0 red, 0 -1px 0 red;
+  }
+}
+
+.stroke {
+  stroke-width: var(--stroke, 2px);
+
+  &--thick { --stroke: 8px; }
+}
+
+.stroke-gradient {
+  background: var(--lin-grad-4-color);
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
+.text-gradient {
+  color: var(--trn);
+  background: var(--lin-grad-4-color);
+  background-clip: text; // border-box
+  box-decoration-break: clone;
+
+  /* autoprefixer: ignore next */
+  -webkit-text-fill-color: transparent;
+}
+
+:where([class*='--stroke'], .paint-stroke) {
+  --stroke-width: 2px;
+  --stroke-color: 2px;
+
+  /* autoprefixer: ignore next */
+  -webkit-text-stroke: var(--stroke-width) var(--stroke-color);
+}
+
+:where([class*='--bloom']) {
+  position: relative;
+  display: inline-block;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    content: attr(data-count);
+    filter: blur(var(--bloom, var(--blur-md)));
+  }
+
+  /* img + img {
+      position: absolute;
+      top: -2vmin;
+      left: -2vmin;
+      z-index: -1;
+      width : calc(100% + 4vmin);
+      height: calc(100% + 4vmin);
+      filter: blur(8vw);
+    }
+  } */
+}
+
+.border-gradient {
+  --offset: 5px;
+
+  &::before {
+    position: absolute;
+    top: calc(-1 * var(--offset));
+    left: calc(-1 * var(--offset));
+    z-index: 1;
+    width: calc(100% + var(--offset) * 2);
+    height: calc(100% + var(--offset) * 2);
+    content: '';
+    background:
+      linear-gradient(
+        130deg,
+        var(--accent),
+        var(--accent) 41.07%,
+        var(--accent-shade) 76.05%
+      );
+    border-radius: 12px;
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    content: '';
+    background: #000;
+    border-radius: 8px;
+  }
+
+  & > * { z-index: 3; }
+}
+
+.mask-border-gradient {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background-image: var(--lin-grad-4-color);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: add, add;
+    mask-composite: exclude;
+  }
+}
+
+.bg-layer {
+  background-image: var(--bg-image, var(--pattern));
+  background-size: var(--bg-size, 100%);
+  background-position: var(
+    --bg-pos,
+    var(--bg-posx, 50%)
+    var(--bg-posy, 50%)
+  );
+
+  &--pattern-1 {
+    // https://drafts.csswg.org/css-images-4/#color-stop-syntax
+    --color-stop-1: var(--accent);
+    --color-stop-2: var(--accent-shade);
+    --pattern:
+      repeating-radial-gradient(
+        circle at 60%,
+        var(--color-stop-1),
+        var(--color-stop-1) 3px,
+        var(--trn) 4px,
+        var(--color-stop-1) 5px
+      ),
+      repeating-radial-gradient(
+        circle at 45%,
+        var(--color-stop-2),
+        var(--color-stop-2) 3px,
+        var(--trn) 4px,
+        var(--color-stop-2) 5px
+      );
+    --bg-size: 200%;
+  }
+
+  &--pattern-2 {
+    --color-stop-1: var(--accent-a50);
+    --color-stop-2: var(--accent-a50);
+    --pattern:
+      radial-gradient(var(--color-stop-1) 15%, transparent 16%),
+      radial-gradient(var(--color-stop-2) 15%, transparent 16%),
+      linear-gradient(
+        45deg,
+        var(--trn) 48%,
+        var(--color-stop-1) 48%,
+        var(--color-stop-1) 52%,
+        var(--trn) 52%
+      ),
+      linear-gradient(
+        -45deg,
+        var(--trn) 48%,
+        var(--color-stop-2) 48%,
+        var(--color-stop-2) 52%,
+        var(--trn) 52%
+      );
+    --bg-pos: 0 0, 0.625rem 0.625rem, 0 0, 0 0;
+    --bg-size:
+      1.25rem 1.25rem,
+      1.25rem 1.25rem,
+      0.625rem 0.625rem,
+      0.625rem 0.625rem;
+  }
+
+  &--pattern-3 {
+    --color-stop: var(--accent-a50);
+    // https://drafts.csswg.org/css-images/#repeating-gradients
+    --pattern:
+      repeating-radial-gradient(
+        ellipse at right,
+        var(--color-stop) 10%,
+        var(--color-stop) 1px,
+        transparent 1px,
+        transparent 3px,
+        var(--color-stop) 3px,
+        var(--color-stop) 4px,
+        transparent 4px,
+        transparent 5px,
+        var(--color-stop) 5px,
+        var(--color-stop) 6px,
+        transparent 6px,
+        var(--color-stop) 6px,
+        var(--color-stop) 7px,
+        transparent 7px,
+        transparent 8px,
+        var(--color-stop) 8px,
+        var(--color-stop) 9px,
+        transparent 9px,
+        transparent 10px
+      );
+    --bg-size: 1.25rem 2.5rem;
+  }
+
+  &--pattern-4 {
+    --color-stop: var(--accent);
+    --pattern:
+      repeating-radial-gradient(
+        var(--color-stop),
+        var(--color-stop) 2px,
+        var(--trn) 2px,
+        var(--trn) 4px
+      );
+  }
+}
+
+.admission {
+  @include config.ticket();
+}

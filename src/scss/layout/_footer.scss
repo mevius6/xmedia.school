@@ -1,0 +1,149 @@
+@use '../config';
+
+.widget,
+.page__footer {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  z-index: 1010;
+}
+
+.page__footer {
+  --flow-space: var(--spacer-3x);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  inline-size: 100%;
+
+  // .byline { font-style: italic; }
+
+  .logo {
+    // block-size: 100%;
+    max-inline-size: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  a { --arrow: '' }
+}
+
+.widget {
+  display: grid;
+  gap: var(--spacer-2x);
+  padding-block: var(--spacer-2x);
+  margin-inline-end: auto;
+  user-select: none;
+
+  // https://codepen.io/t_afif/pen/dyexeKO
+ /* --circle-offset:
+    calc(var(--big-circle-r) + var(--pillar-size) + var(--circle-r));
+  --filler:
+    conic-gradient(
+      at right var(--circle-r) top var(--circle-r),
+      #0000 25%,
+      var(--card-color) 0
+    );
+  position: relative;
+  border-top-right-radius: 0;
+  filter: drop-shadow(var(--card-shadow));
+  background: radial-gradient(var(--big-circle-r) at 100% 0%,#0000 98%,var(--card-color)) calc(-1*var(--pillar-size)) var(--pillar-size), radial-gradient(var(--circle-r) at top var(--circle-r) right var(--circle-offset), var(--card-color) 98%,#0000), radial-gradient(var(--circle-r) at right var(--circle-r) top var(--circle-offset), var(--card-color) 98%,#0000), var(--filler) calc(-1*(var(--big-circle-r) + var(--pillar-size))) 0, var(--filler) 0 calc(var(--big-circle-r) + var(--pillar-size));
+  background-repeat: no-repeat;
+
+  --circle-r: 20px;
+  --big-circle-r: 22px;
+  --pillar-size: max(23px , var(--circle-r));
+  --card-color: #fff;
+  --card-shadow: 0 10px 48px rgba(21, 44, 115, 0.15);
+  width: 200px;
+  min-height: 240px;
+  border-radius: 25px; */
+
+  border-radius: 1.75ch;
+  backdrop-filter: blur(10px);
+  filter: drop-shadow(0 0 8px var(--foreground-a25));
+
+  @media (hover: hover) {
+    will-change: transform;
+    transform:
+      rotateX(20deg) rotateY(-35deg)
+      translate3d(var(--tx, 25%), var(--ty, 33.333%), var(--tz, 1px))
+      skew(.045turn);
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition:
+      transform var(--duration-5) var(--ease-in-out-cubic),
+      filter var(--duration-5) var(--ease-in-out-cubic);
+
+    &:hover {
+      transform: translate3d(0, 0, 0);
+      filter: drop-shadow(0 0 16px var(--foreground-a25));
+    }
+  }
+
+  & > p {
+    aspect-ratio: 5/4;
+    inline-size: calc(5rem + .25vmax); // 6rem
+    display: grid;
+    place-items: center;
+    font-family: var(--font-primary);
+    color: var(--neutral);
+
+    & > * { grid-area: 1/1; }
+
+    time {
+      font-size: inherit;
+      font-weight: 500;
+      font-style: normal;
+      color: inherit;
+      text-shadow:
+        0 1px 0 hsl(var(--black) / .04),
+        0 0 5px hsl(var(--white) / .15);
+    }
+
+    u > svg {
+      max-inline-size: 100%;
+      block-size: auto;
+
+      font-family: var(--font-primary);
+      font-weight: 700;
+      line-height: 1.1;
+      will-change: transform;
+      transform: rotate(0) scale(1.25);
+      animation: spinAroundAxle 7s linear infinite forwards;
+      filter: drop-shadow(0 3px 6px var(--accent-shade));
+
+      & > text {
+        font-feature-settings: 'case' 1;
+        text-transform: uppercase;
+        stroke: var(--accent-shade);
+        fill: currentcolor;
+        color: var(--accent-extra);
+
+        [data-theme-style=light] & { color: var(--accent); }
+      }
+    }
+  }
+
+  & > ul {
+    display: none;
+    place-self: center;
+
+    &:nth-of-type(1),
+    &:nth-of-type(2) { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
+@keyframes spinAroundAxle {
+  from { transform: rotate(360deg) scale(1.25); }
+}
+
+@include config.respond('tablet') {
+  .widget {
+    inset-inline-end: unset;
+    inset-inline-start: 0; }
+  .widget ul { display: grid; }
+}

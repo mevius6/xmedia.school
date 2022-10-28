@@ -1,0 +1,26 @@
+.tooltip {
+  position: relative;
+  background: white;
+  padding: 20px 24px;
+  border-radius: 1px;
+}
+
+.tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 30px;
+  height: 20px;
+  background: white;
+  clip-path: polygon(
+    0% 0%,
+    50% 100%,
+    100% 0%
+  );
+  transform: translateY(
+    calc(+100% - 1px)
+  );
+}

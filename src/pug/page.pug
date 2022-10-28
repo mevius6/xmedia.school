@@ -1,0 +1,67 @@
+include ./mixins
+include ./toolchain
+include ./global-vars
+include ./text-content
+
+block vars
+
+doctype html
+html(class="no-js" dir="ltr" lang="ru")
+  head
+    include ./_meta
+
+    block resource-hint-links
+
+    prepend resource-hint-links
+      each host in hosts
+        link(rel="preconnect" href=`https://${host}` crossorigin)
+        link(rel="dns-prefetch" href=`https://${host}` crossorigin)
+
+    link(
+      rel="preload"
+      href="./scss/splitting.css" as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    )
+    noscript: link(rel="stylesheet" href="./scss/splitting.css")
+
+    include ./_fonts
+
+    link(rel="stylesheet" type="text/css" href="./scss/main.scss")
+    script(defer type="module" src="./js/modules.js")
+
+    include ./_captcha
+
+    block head
+
+  body.page.page--loading(itemscope itemtype="https://schema.org/WebPage")
+    noscript
+      dialog#alert(open)
+        form.flow(method="dialog")
+          h2= alert
+          p= alertDesc
+          button(onclick="window.dialog.close();")= alertAction
+
+    include ./_header
+
+    main(
+      data-id= page.id
+      itemprop="mainEntity"
+      itemscope itemtype="https://schema.org/Course"
+      itemid= data.meta.domain
+    )
+      //- https://parceljs.org/languages/html/#json-ld
+      //- include ./_microdata
+
+      //- if page.id === 'index'
+        .a2hs.hidden
+          +cta({
+            base: 'a2hs',
+            type: 'button',
+            text: 'Установить'
+          })
+      block content
+
+    block scripts
+    prepend scripts
+      script(type="module" src="./js/index.js")
+      //- script(src="./a2hs.js")

@@ -1,0 +1,94 @@
+append vars
+  - const navItems = [...hashLinks]
+
+mixin navicon(props={})
+  - let { version: v = 2 } = props
+  span.hamburger
+  if v==1
+    svg(viewBox="0 0 15 15"
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%" height="100%"
+        fill="none"
+        role="presentation"
+        focusable="false"
+        aria-label=""
+    ): path(d="M0 5.5h15m-15-4h15m-15 8h15m-15 4h15" stroke="currentColor")
+  if v==2
+    - let params = [{ y: 10 }, { y: 50 }, { y: 90 }]
+    svg(viewBox="0 0 50 40"
+        height="100%"
+        role="presentation"
+        focusable="false"
+        aria-label="trigram for heaven symbol")
+      each coords in params
+        line(
+          x1="0"
+          x2="100%"
+          y1=`${coords.y}%`
+          y2=`${coords.y}%`)
+
+nav.nav#Nav
+  button.nav__toggle
+    span.line.line--a
+    span.line.line--b
+    span.line.line--c
+    span.line.line--d
+    span.line.line--e
+    noscript: span ☰
+      //- +navicon()
+  ul.nav__items(aria-label="Main Menu")
+    each navItem, i in navItems
+      -
+        let n = i+1
+        let { title, path, subItems, openClass = 'is-open' } = navItem
+        let classes = []
+
+      if subItems
+        li.nav__item(style={ '--zi': navItems.length - i })
+          a.nav__link(
+            id=`item0${n}`
+            href=`./${path}`)
+            span.nav__link-text
+              | #{title}
+          button(
+            type="button"
+            id=`btnItem0${n}`
+            aria-controls=`SubItem0${n}`
+            aria-expanded="false"
+            aria-label="Show"
+            aria-labelledby=`btnItem0${n} item0${n}`
+            onclick="toggleSubNav(this.id);")
+            svg(
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"
+              role="img" aria-hidden="true"
+            ): path(d="M70.3 13.8L40 66.3 9.7 13.8z")
+          ul.nav__subitems.flow(
+            id=`SubItem0${n}`
+            style={ 'display': 'none' })
+            each subItem, i in subItems
+              li.nav__subitem
+                a.nav__link(href=`./${subItem.path}`)
+                  span.nav__link-text
+                    | #{subItem.title}
+      else
+        - let selected = { 'selected': (n === 0) }
+        li.nav__item(class= selected || '')
+          a.nav__link(
+            id=`item0${n}`
+            href=`./${path}`)
+            span.nav__link-text
+              | #{title}
+  -
+    // TODO: implement disclosure for nav w/ hash-links
+    let goBack = 'history.go(-1)'
+    let attrs = {}
+
+  each state, i in ['Open', 'Close']
+    if i==1
+      - attrs['onchange'] = goBack
+
+    a(id=`nav-${state.toLowerCase()}`
+      href="#"
+      title=`${state} Menu`
+      aria-label=`${state} Menu`
+    )&attributes(attrs)

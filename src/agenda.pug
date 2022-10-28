@@ -1,0 +1,65 @@
+extends ./pug/page
+
+block vars
+  - let page = data.pages.agenda
+
+block content
+  section.grid
+    .container.spaced.--lg#agenda(
+      data-id="agenda"
+    )
+      .grid__asym-lhs.sideways.sticky
+        +head({ level: 2, text: 'Расписание занятий', reveal: 'chars' })
+      article.grid__asym-rhs.flow.spaced.--ada-md.scroll-shadows
+        +list({
+          items: agenda,
+          ordered: true,
+          nestedListOrdered: true
+        })
+
+    .container.spaced.--ada-md#contact(
+      data-id="contact"
+    )
+      .grid__center: +head({ level: 2, text: 'Подать заявку', reveal: 'chars' })
+      +form({
+        class: 'grid__center',
+        endpoint: '9239c924',
+        phone: '+7 (NNN) NNN–NN–NN',
+        recaptcha: true
+      })
+      //- +form({ offer: data.pages.offer.path[0] })
+      .meta.grid__content
+        .flow
+          +unorderedList('Контакты')
+            li
+              //- | Фактический адрес: #{meta.adds[0]}
+              | Фактический адрес:#[br]
+              | #{meta.adds[0]}
+            li
+              | Электронная почта:
+              |
+              +link({
+                email: {
+                  to: data.meta.email,
+                  subject: '…',
+                  body: '…'
+                }
+              })
+            li
+              | Телефон:
+              |
+              +link({ phone: meta.phone })
+        .flow
+          +unorderedList('Реквизиты')
+            li= meta.trader
+            li= meta.number
+        .flow
+          +unorderedList('Платёжные системы')
+            li: include ./images/ma-logo.svg
+
+  //- .admission
+  include ./pug/_footer
+
+  include ./pug/_svg-filters
+
+block scripts

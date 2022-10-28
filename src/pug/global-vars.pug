@@ -1,0 +1,115 @@
+//- ----------------- Defines the default global constants ----------------- -//
+-
+  const DOT = '.'
+  const SOL = '/'
+  const DOTSLASH = `${DOT}${SOL}`
+-
+  const SEP = SOL // Directory Separator
+  const DIR = {}, // An object-like “pattern” for corresponding directories
+  {
+    ROOT = SOL,
+    CURR = DOTSLASH, // <-- Current directory or currdir operand
+    SRC = `src${SEP}` // <-- Source directory
+  } = DIR
+-
+  // https://github.com/component/escape-html
+  // https://github.com/cfjedimaster/htmlescape-vscode
+  // OR
+  const chars = {},
+        sequences = {},
+   {
+    block: FULL_BLOCK = '█',
+    thinsp: THSP = ' ',
+    hairsp: HSP = ' ',
+    emdash: MDASH = '—',
+    larrow: LARR = '←',
+    rarrow: RARR = '→',
+    bullet: BULL = '•'
+  } = chars, {
+    spacedEmDash = `${HSP}${MDASH}${HSP}` // The sequence <HSP, EM DASH, HSP>
+  } = sequences
+-
+  // %-escaped delimiters
+  const LT = '%3C' // '<'
+  const EQ = '%3D' // '=' Equal
+  const GT = '%3E' // '>'
+  /*
+   * https://www.unicode.org/reports/tr14/#QU
+   * https://www.unicode.org/reports/tr29/#Single_Quote
+   * https://www.unicode.org/reports/tr29/#Double_Quote
+   * https://www.unicode.org/reports/tr14/#SP
+   * https://www.unicode.org/reports/tr14/#SY
+   */
+  const SQ = '%27' // ''' &apos; Apostrophe, Quote (APL)
+  const DQ = '%22' // '"' &quot; Quotation Mark
+  const SP = '%20' // ' ' White Space (WS | S)
+  const SL = '%2F' // '/' Solidus, Slash
+-
+  const MARKER = RARR // ('•' | '◦' | '‣' | '⁃' | '☞' | '→' | '❧')
+-
+  // XML/SVG
+  const XML = 'xml'
+  const SVG = 'svg'
+  const SVG_STAG = `${LT}${SVG}`,
+        SVG_ETAG = `${LT}${SOL}${SVG}${GT}`
+-
+  // Attribute Values (AttValue)
+  const SVG_VERSION_NUM = 2,                    // 1.1 | 1.2 | 2
+        SVG_MEDIA_TYPE = `image/${SVG}+${XML}`, // MIME type
+        SVG_ENCODING_DECL = 'utf8'              // encName := (UTF-8 | UTF-16)
+  // Attribute-list Declaration (AttlistDecl)
+  const SVG_VERSION_INFO = `version${EQ+DQ}${SVG_VERSION_NUM}${DQ}`,
+        SVG_VIEWBOX = `viewBox`
+-
+  // CORS attValues
+  const ANON = 'anonymous'
+  const STRICTER = 'strict-origin-when-cross-origin'
+-
+  // Dummy content for skeleton or wireframing:
+  // - https://fonts.google.com/specimen/Flow+Block
+  // - https://github.com/los-gordos/BLOKK
+  // - https://v-fonts.com/fonts/adobe-blank-vf-and-friends
+  // OR
+  const solid = {}, {
+    lineXs = FULL_BLOCK.repeat(4),
+    lineSm = FULL_BLOCK.repeat(8),
+    lineMd = FULL_BLOCK.repeat(16),
+    lineLg = FULL_BLOCK.repeat(32),
+    lineXl = FULL_BLOCK.repeat(64)
+  } = solid
+-
+  // Frequently used URL's fragments
+  const links = {
+    IG: 'https://www.instagram.com/',
+    VK: 'https://vk.com/'
+  }, {
+    IG,
+    VK
+  } = links
+-
+  const hosts = [
+    'graphql.datocms.com',
+    'stream.mux.com',
+    'res.cloudinary.com',
+  ]
+-
+  const Y = new Date().getFullYear()
+-
+  // Colour swatches
+  const colors = {
+    // ...
+  }, {
+    purple = '#a277ff',
+    green  = '#61ffca',
+    red    = '#ff6767',
+    pink   = '#f694ff',
+    white  = '#edecee',
+    gray   = '#6d6d6d',
+    orange = '#ffca85',
+    blue   = '#82e2ff'
+  } = colors
+-
+  const colorPairs = {
+    'grdOrangePink': [orange, pink],
+    'grdPurplePink': [purple, pink],
+  }

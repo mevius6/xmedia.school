@@ -1,0 +1,184 @@
+@use '../config';
+
+$icons: (vk, ig, tel, at);
+$hashLinks: './#';
+
+// https://css-tricks.com/css-link-hover-effects/
+// https://tympanus.net/codrops-playground/huijing/Qqpwg5Iy/editor
+
+a {
+  --link-underline-h: 1px;
+
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  word-break: normal;
+  background: var(--link-background);
+
+  // Hover effect for single-line links
+  // header > nav &:where(:not(.logo))::before {…}
+  // OR
+  &:where([href^='#{$hashLinks}'], :is(nav) [href^='/']) {
+    &::after,
+    &::before {
+      position: absolute;
+      inset-block-start: var(--posy, 100%);
+      inset-inline-start: 0;
+      inline-size: 100%;
+      block-size: var(--link-underline-h);
+      pointer-events: none;
+      content: '';
+      filter: blur(0.125px);
+      background-image: var(--lin-grad-4-color);
+      transition: transform 300ms, filter 150ms;
+      transform: scale3d(var(--sx, 0), 1, 1);
+      transform-origin: var(--offset-x, 100%) 50%;
+    }
+    // subtract surrounding space
+    &::before { --posy: calc(100% - 1ex); }
+    &::after {
+      --posy: 1ex;
+      --offset-x: 0;
+    }
+    &:hover::before,
+    &:hover::after {
+      --sx: 1;
+    }
+    &:hover::before {
+      --offset-x: 0; // 50%;
+    }
+    &:hover::after {
+      --offset-x: 100%;
+    }
+  }
+
+  // &:any-link {}
+  // &[aria-current='page'] {…}
+
+  // Hover effect for multi-line links with line breaks
+  :is(article, section, form, label) &:where(
+    :not([data-js-anim], [data-icon])
+  ) > span {
+    --bg-w: 0;
+    background-image: var(--lin-grad-2-color);
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: 0 var(--bg-h, 0);
+    transition: background-size 350ms;
+    // underline
+    --bg-h: 1px;
+    padding-block-end: 1px;
+
+    &:where(:hover, :focus-visible) {
+      // --bg-h: 100%;
+      background-size: 100% var(--bg-h);
+      background-position-x: left;
+    }
+  }
+
+  // &:is(:hover, :focus) {…}
+
+  &:is(:link, :visited) {
+    // color: var(--link-text-color, var(--foreground));
+    transition: all 150ms ease-in-out;
+  }
+
+  &:is(:focus, :active, [aria-current='page']) {
+    @include config.text-gradient(135deg, var(--accent-shade), var(--accent));
+
+    // color: var(--link-text-color, var(--accent-extra));
+
+    &:not([class*='cta']) { filter: brightness(120%); }
+  }
+
+  // https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html
+  &:focus-visible {
+    outline: var(--accent-extra) dotted thin;
+    outline-offset: 2px;
+  }
+
+  &:where([href*='://'])::after {
+    font-family: inherit;
+    font-size: 0.75em;
+    content: var(--arrow, ' ↗');
+  }
+
+  &[download]::after { --arrow: ' ↓'; }
+
+  &[class*='cta'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-around;
+    min-block-size: var(--min-touch-target-size);
+    padding: 1ch 2ex;
+    // overflow: hidden;
+    overflow: visible;
+    cursor: pointer;
+    // background-color: var(--background);
+    border-radius: 2px;
+    // box-shadow: var(--accent) 0 0 0 1px inset;
+    box-shadow: 0 8px 24px var(--shadow);
+    text-shadow: 1px 1px #000a;
+
+    // &:is(:focus, :active) { transform: translateY(1px); }
+    &:active {
+      box-shadow: var(--turn-off-shadow);
+      transform: translateY(1px) scale3d(.95, .95, 1);
+    }
+  }
+
+  // &[data-js-anim='bg-gradient'] {
+  //   --link-background:
+  //     linear-gradient(var(--background-a95), var(--background)) padding-box,
+  //     radial-gradient(
+  //       farthest-corner at var(--x, 0) var(--y, 0),
+  //       var(--accent-extra),
+  //       var(--accent-shade)
+  //     ) border-box;
+
+  //   appearance: none;
+  //   border: 2px solid transparent;
+  //   border-radius: var(--radius-x);
+  //   color: var(--foreground);
+
+  //   &:is(:active) {
+  //     --link-background:
+  //       linear-gradient(var(--background-a60), var(--background-a80)) padding-box,
+  //       radial-gradient(
+  //         farthest-corner at var(--x,50%) var(--y,50%),
+  //         var(--accent-extra),
+  //         var(--accent-shade)
+  //       ) border-box;
+
+  //     box-shadow: 0 0 0 var(--shadow);
+  //     transform: translateY(1px) scale3d(.95, .95, 1);
+  //   }
+  // }
+
+  & > [data-icon] {
+    --icon-size: 1.25rem;
+
+    display: block;
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+
+  @each $i in $icons {
+    > [data-icon=#{$i}] {
+      background-image: url('../images/#{$i}.svg');
+      // background-image: var(--#{$i});
+    }
+  }
+
+  &[aria-label='ig'] {
+    --arrow: '';
+    display: inline-block;
+  }
+
+  [role='list'] & {
+    justify-self: start;
+  }
+}

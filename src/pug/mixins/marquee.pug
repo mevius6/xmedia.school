@@ -1,0 +1,10 @@
+mixin marquee(props)
+  .marquee
+    .marquee__inner(aria-hidden="true" style={
+      '--anim-direction': props.animDir || 'normal'
+    })
+      each val of Array(props.iter || 4)
+        if props.text
+          span= props.text
+        else if block
+          block

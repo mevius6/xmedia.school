@@ -1,0 +1,376 @@
+@use '../config';
+
+.background { z-index: -1; } // <-- Safari
+
+/* REFS:
+    → https://drafts.csswg.org/css-contain-3/
+    → https://css.oddbird.net/rwd/query/explainer/
+    → https://css-tricks.com/a-cornucopia-of-container-queries/
+    → https://github.com/dbaron/container-queries-implementability#proposal
+    → https://ishadeed.com/article/container-queries-are-finally-here/ */
+
+// .container { container-type: inline-size; }
+// @container (max-width: 45em) {…}
+
+.container {
+  --border-width: 1px 0 0;
+  // --border-color: var(--foreground-a25);
+
+  // contain: style layout inline-size;
+  // container: inline-size;
+  position: relative;
+  display: grid;
+  row-gap: var(--spacer-3x);
+  grid-template-columns: inherit;
+  grid-template-columns: subgrid;
+  grid-column: full;
+  column-gap: inherit;
+
+  &:where([data-id='hero']) {
+    align-items: center;
+    min-block-size: 100vh;
+    position: relative;
+    place-items: center;
+
+    & > * { grid-row: 1; }
+
+    video,
+    video-player {
+      z-index: -1;
+      grid-column: full;
+      max-block-size: 100vh;
+    }
+
+    article {
+      --flow-space: var(--spacer-3x);
+      // --max-line-length: 100%;
+
+      z-index: 1;
+      padding-inline: 3ex;
+      padding-block: 2ch;
+      margin-inline: var(--spacer-2x);
+      text-align: left;
+
+      // --drop-shadow: drop-shadow(0 8px 24px var(--foreground-a25));
+      --bloom: 20;
+      filter:
+        drop-shadow(0 0 calc(var(--bloom, 8) * 1px) var(--foreground-a25));
+
+      [data-theme-style=dark] & {
+        // --c1: var(--background-a25);
+        // --c2: var(--background-a50);
+        box-shadow:
+          // 0 0 20px var(--foreground-a25),
+          inset 0 0 10px var(--foreground-a25);
+      }
+
+      @include config.respond('tablet') {
+        margin-inline: unset;
+        grid-column: center;
+        grid-column: 2;
+        place-self: center start;
+      }
+    }
+  }
+
+  :where(.reveal-wrapper) { overflow: hidden; }
+
+  &:where([data-id='ticker']) {
+    --speed-mod: 11;
+
+    position: relative;
+    min-block-size: 4rem;
+    font-weight: 500;
+  }
+
+  &:where([data-id='popout']) {
+    :is(.list, .body) {
+      padding-inline: var(--gutter);
+      padding-block: calc(var(--gutter) / .75);
+      margin-inline: calc(-1 * var(--gutter));
+
+      color: hsl(var(--black));
+      background-color: var(--foreground);
+      // background-image: var(--noise-svg), var(--lin-grad-4-color);
+      background-image: var(--lin-grad-4-color);
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+
+      a { color: inherit; }
+    }
+
+    // 10th
+    &:nth-last-child(3) .body {
+      --clip: var(--shape-point-left-cutout-tri-right);
+
+      margin-inline-start: calc(-4 * var(--gutter));
+      padding-inline-start: calc(var(--gutter) * 4);
+    }
+
+    // Set angled corners and gradient shadow to 4th, 8th, 10th child-nodes.
+    &:is(:nth-child(-4n+8), :nth-last-child(3)) div:nth-of-type(2) {
+      --clip: polygon(
+        0 10%, 10% 0,
+        calc(100% - 2rem) -1px, calc(100% - 2rem) 0px,
+        calc(100% - 1em) 1rem, calc(100% - 1rem) 1rem,
+        calc(100% - 1rem) 3rem, 100% 4rem, calc(100% + 1px) 4rem,
+        100% 0, 100% 90%, 90% 100%, 0 100%);
+      --clip: polygon(
+        0 10%, 10% 0,
+        calc(100% - 4rem) -1px, calc(100% - 4rem) 0px, calc(100% - 3rem) 1rem, calc(100% - 1rem) 1rem, calc(100% - 1rem) 1rem, 100% 2rem, calc(100% + 1px) 2rem,
+        100% 0, 100% 90%, 90% 100%, 0 100%,
+        calc(50% + 1.5rem) calc(100% + 1px), calc(50% + 1.5rem) 100%,
+        calc(50% + 1.5rem) calc(100% - 1rem), calc(50% + 0.5rem) calc(100% - 1rem),
+        calc(50% - 0.5rem) calc(100% - 1rem), calc(50% - 1.5rem) calc(100% - 1rem), calc(50% - 1.5rem) 100%, calc(50% - 1.5rem) calc(100% + 1px), -1px calc(100% + 1px));
+      --clip: polygon(
+        0 10%, 10% 0,
+        calc(100% - 4rem) -1px, calc(100% - 4rem) 0px, calc(100% - 3rem) 1rem, calc(100% - 1rem) 1rem, calc(100% - 1rem) 1rem, 100% 2rem, calc(100% + 1px) 2rem,
+        100% 0, 100% 90%, 90% 100%, 0 100%,
+        calc(50% + 1.5rem) calc(100% + 1px), calc(50% + 2.5rem) 100%,
+        calc(50% + 2.5rem) calc(100% - 1rem), calc(50% + 0.5rem) calc(100% - 1rem),
+        calc(50% - 0.5rem) calc(100% - 1rem), calc(50% - 2.5rem) calc(100% - 1rem), calc(50% - 2.5rem) 100%, calc(50% - 1.5rem) calc(100% + 1px), -1px calc(100% + 1px));
+
+      position: relative;
+
+      &::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(
+            var(--accent),
+            33.333%,
+            var(--accent-shade)
+          );
+        transform: translateY(15%) scale(.85);
+        filter: blur(30px);
+        content: '';
+      }
+    }
+
+    // gradient positioning for “background-attachment: fixed” prop
+    &:nth-child(4)  { --bg-posy: 5%; }
+    &:nth-child(8)  { --bg-posy: 50%; }
+    &:nth-child(10) { --bg-posy: 95%; }
+
+    @supports (background-attachment: fixed) {
+      :is(.list, .body) {
+        background-attachment: fixed;
+        background-position: var(--bg-posy, 50%) 50%;
+        background-size: cover, 150%;
+      }
+    }
+  }
+
+  &:where([data-id='expert']) {
+    align-items: center;
+  }
+
+  &:where([data-id='upskill']) {
+    a { --flow-space: var(--spacer-3x); } // CTA
+  }
+
+  &:where(.terms) {
+    max-inline-size: var(--width-md);
+    margin: auto;
+    padding-inline: var(--spacer-2x);
+    padding-block: var(--spacer-6x);
+
+    h1 { line-height: 1.15; }
+
+    [role="list"] {
+      max-width: 60rem;
+      margin-block-start: 1rem;
+      margin-block-end: 1.75rem;
+      padding-inline-start: 1.875rem;
+
+      // li::marker { content: counters(list-item,".",decimal) "."; }
+
+      li::before {
+        min-inline-size: 2rem;
+        min-block-size: 2rem;
+        inline-size: fit-content;
+        block-size: auto;
+        // padding: var(--spacer-2x);
+        padding: 1ch;
+        aspect-ratio: var(--ratio-square);
+        // content: counter(orderedlist);
+        // counter-increment: orderedlist;
+        background-image: var(--lin-grad-convex);
+        background-blend-mode: hard-light;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.25rem;
+        align-self: baseline;
+        // align-self: start;
+        word-break: keep-all;
+      }
+    }
+  }
+
+  &:where([data-id='contact']) {
+    place-items: center;
+
+    .meta { // <-- footer
+      display: grid;
+      padding: var(--spacer-2x);
+      // place-self: center;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--gutter);
+      font-size: .75rem;
+
+      svg {
+        max-inline-size: 100%;
+        inline-size: calc(1.125rem + 2vw);
+        block-size: auto;
+      }
+
+      div { place-self: start; }
+
+      ul { gap: var(--spacer) }
+
+      li,
+      strong { color: hsl(var(--gray)); }
+
+      li {
+        display: inline-block;
+
+        & > a:where(:not(:hover)) {
+          color: inherit !important;
+        }
+      }
+
+      strong { font-weight: 500; }
+
+      hr {
+        --flow-space: var(--spacer);
+        background-color: var(--foreground-a25);
+      }
+    }
+
+    @include config.respond('tablet') {
+      column-gap: var(--gutter);
+      grid-template-rows: 1fr auto;
+
+      & > .meta {
+        display: flex; // override
+        justify-content: space-around;
+      }
+    }
+  }
+
+  &:where([data-id='outline']) {
+    div:nth-child(2n+1) {
+      display: grid;
+      place-items: center;
+    }
+  }
+
+  // w/ sticky timeline
+  &:where([data-id='agenda']) {
+    & ol > li::before {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      align-self: start;
+    }
+  }
+
+  // scroller w/ sticky title
+  @include config.respond('tablet') {
+    &[data-id='agenda'] {
+      display: grid;
+      max-block-size: 100vh;
+      overflow-x: hidden;
+      overflow-y: var(--overflow-y, auto);
+      overflow-scrolling: touch;
+
+      // for sticky pos
+      & > .sideways { min-inline-size: 100vh; }
+
+      // for scroll-shadows
+      // 'padding-block' prop is defined by the utility class — 'spaced'
+      & > article { overflow: inherit; background: none; }
+    }
+
+    &:where(.scroller) { --overflow-y: scroll; } // auto
+
+    // gradient line
+    &:where(
+      // :not(:first-of-type, :nth-last-child(-n+2))
+      :nth-child(-4n+8), :nth-last-child(3)
+    ) {
+      &::after {
+        --s: 1;
+        inset-block-end: 0;
+      }
+      &::before {
+        --s: -1;
+        inset-block-start: 0;
+      }
+    }
+
+    &:where(
+      // :not(:first-of-type, :nth-last-child(-n+2))
+      :nth-child(-4n+8), :nth-last-child(3)
+    )::before,
+    &:where(
+      // :not(:first-of-type, :nth-last-child(-n+2))
+      :nth-child(-4n+8), :nth-last-child(3)
+    )::after {
+      --bg-light:
+        linear-gradient(
+          var(--trn),
+          33.333%,
+          var(--accent-shade) 50%,
+          var(--accent) 100%
+        );
+      --bg-dark:
+        linear-gradient(
+          var(--trn),
+          33.333%,
+          var(--accent-shade) 50%,
+          var(--accent) 100%
+        );
+      z-index: -1;
+      position: absolute;
+      inset-inline-start: 50%;
+      transform: translatex(var(--tx, -50%)) scale(var(--s));
+
+      block-size: calc(var(--spacer-12x)*2);
+      inline-size: 1px;
+      background-image: var(--bg-image);
+      content: '';
+
+      [data-theme-style=light] & {
+        background-image: var(--bg-light);
+      }
+      [data-theme-style=dark] & {
+        background-image: var(--bg-dark);
+      }
+    }
+  }
+}
+
+.sideways {
+  display: flex;
+  // align-self: start;
+  align-items: center;
+  justify-content: space-evenly;
+
+  @include config.respond('tablet') {
+    --border-width: 0 1px 0;
+
+    // justify-content: flex-end;
+    padding-block: var(--spacer-6x);
+    padding-inline: var(--spacer-4x);
+
+    border-color: var(--border-color, var(--accent-a80));
+    border-style: solid;
+    border-width: var(--border-width);
+  }
+}
+
+section:where(.grid) {
+
+}
