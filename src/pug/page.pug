@@ -50,7 +50,7 @@ html(class="no-js" dir="ltr" lang="ru")
       itemid= data.meta.domain
     )
       //- https://parceljs.org/languages/html/#json-ld
-      //- include ./_microdata
+      include ./_microdata
       //-
         .a2hs.hidden
           +cta({
@@ -60,8 +60,8 @@ html(class="no-js" dir="ltr" lang="ru")
           })
       block content
 
-      include ./pug/_footer
-      include ./pug/_svg-filters
+      include ./_footer
+      include ./_svg-filters
 
     block scripts
     prepend scripts
