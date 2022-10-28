@@ -40,7 +40,7 @@
     }
 
     article {
-      --border-gradient: var(--lin-grad-4-color);
+      --border-gradient: var(--lin-grad-4-hues);
       --flow-space: var(--spacer-3x);
       // --max-line-length: 100%;
 
@@ -89,8 +89,8 @@
 
       color: hsl(var(--black));
       background-color: var(--foreground);
-      // background-image: var(--noise-svg), var(--lin-grad-4-color);
-      background-image: var(--lin-grad-4-color);
+      // background-image: var(--noise-svg), var(--lin-grad-4-hues);
+      background-image: var(--lin-grad-4-hues);
       background-repeat: no-repeat;
       background-position: 50% 50%;
 

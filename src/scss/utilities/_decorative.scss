@@ -147,7 +147,7 @@
     opacity: 0.125;
     filter: brightness(1.25);
     // background-color: var(--background-a25);
-    background-image: var(--lin-grad-4-color);
+    background-image: var(--lin-grad-4-hues);
     background-blend-mode: color-burn;
   }
 }
@@ -302,14 +302,14 @@
 }
 
 .stroke-gradient {
-  background: var(--lin-grad-4-color);
+  background: var(--lin-grad-4-hues);
   color: transparent;
   -webkit-background-clip: text;
 }
 
 .text-gradient {
   color: var(--trn);
-  background: var(--lin-grad-4-color);
+  background: var(--lin-grad-4-hues);
   background-clip: text; // border-box
   box-decoration-break: clone;
 
@@ -394,7 +394,7 @@
     inset: 0;
     padding: var(--border-gradient-width, 1px);
     border-radius: inherit;
-    background-image: var(--border-gradient, var(--lin-grad-2-color));
+    background-image: var(--border-gradient, var(--lin-grad-2-hues));
     mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);

@@ -19,7 +19,13 @@
 
 // Contains colour swatches and theme configuration
 // @layer theme { :root {…} }
+
 :root {
+  // ----------------------------------
+  // Color Palettes
+  // ----------------------------------
+
+  // HSL helpers
   --trn: hsl(0 0% 0% / 0);
   --hue: 0;
   --sat: 0%;
@@ -28,11 +34,55 @@
   --hsl: var(--hue) var(--sat) var(--lum);
   --white: var(--hsl);
 
-  // ----------------------------------
-  // Color Palettes
-  // ----------------------------------
-
   // → https://github.com/daltonmenezes/aura-theme
+  --black: #15141b;
+  --white: #edecee;
+  --gray: #6d6d6d;
+  --purple: #a277ff;
+  --purple-fading: #3d375e7f;
+  --green: #61ffca;
+  --orange: #ffca85;
+  --pink: #f694ff;
+  --blue: #82e2ff;
+  --red: #ff6767;
+  --background-color: var(--black);
+  --foreground-color: var(--white);
+  --muted-color: var(--gray);
+  --selection-color: var(--purple-fading);
+  --primary-color: var(--purple);
+  --secondary-color: var(--green);
+  --tertiary-color: var(--orange);
+  --quaternary-color: var(--pink);
+  --quinary-color: var(--blue);
+  --senary-color: var(--red);
+  --warning-color: var(--orange);
+  --success-color: var(--green);
+  --error-color: var(--red);
+  --black-soft: #15141b;
+  --white-soft: #bdbdbd;
+  --gray-soft: #6d6d6d;
+  --purple-soft: #8464c6;
+  --purple-fading-soft: #3d375e7f;
+  --green-soft: #54c59f;
+  --orange-soft: #c7a06f;
+  --pink-soft: #c17ac8;
+  --blue-soft: #6cb2c7;
+  --red-soft: #c55858;
+  --background-soft-color: var(--black-soft);
+  --foreground-soft-color: var(--white-soft);
+  --muted-soft-color: var(--gray-soft);
+  --selection-soft-color: var(--purple-fading-soft);
+  --primary-soft-color: var(--purple-soft);
+  --secondary-soft-color: var(--green-soft);
+  --tertiary-soft-color: var(--orange-soft);
+  --quaternary-soft-color: var(--pink-soft);
+  --quinary-soft-color: var(--blue-soft);
+  --senary-soft-color: var(--red-soft);
+  --warning-soft-color: var(--orange-soft);
+  --success-soft-color: var(--green-soft);
+  --error-soft-color: var(--red-soft);
+
+  // HSL notation
   --black: 249deg 15% 9%;
   --white: 270deg 6% 93%;
   --gray: 0deg 0% 43%;
@@ -53,14 +103,15 @@
   --accent-extra: hsl(var(--teal)); // secondary • active
 
   // ----------------------------------
-  // Gradients
+  // Gradients ∇
   // ----------------------------------
+  // Gen → https://www.joshwcomeau.com/gradient-generator/
 
-  // → https://www.joshwcomeau.com/gradient-generator/
-  --lin-grad-5-color:
+  // ROYGBIV
+  --lin-grad-voygb:
     linear-gradient(
       45deg,
-      hsl(259deg 100% 73%) 0%,
+      var(--accent) 0%,
       hsl(270deg 100% 75%) 8%,
       hsl(281deg 100% 77%) 15%,
       hsl(292deg 100% 78%) 23%,
@@ -75,10 +126,10 @@
       hsl(186deg 96% 68%) 92%,
       hsl(194deg 100% 75%) 100%
     );
-  --lin-grad-5-color:
+  --lin-grad-5-hues:
     linear-gradient(
       45deg,
-      hsl(160deg 100% 69%) 0%,
+      var(--accent-extra) 0%,
       hsl(174deg 93% 63%) 8%,
       hsl(183deg 93% 66%) 15%,
       hsl(192deg 100% 74%) 23%,
@@ -91,12 +142,12 @@
       hsl(292deg 100% 78%) 77%,
       hsl(281deg 100% 77%) 85%,
       hsl(270deg 100% 75%) 92%,
-      hsl(259deg 100% 73%) 100%
+      var(--accent) 100%
     );
-  --lin-grad-4-color:
+  --lin-grad-4-hues:
     linear-gradient(
       45deg,
-      hsl(160deg 100% 69%) 0%,
+      var(--accent-extra) 0%,
       hsl(119deg 78% 79%) 9%,
       hsl(74deg 64% 71%) 18%,
       hsl(46deg 78% 72%) 27%,
@@ -107,9 +158,9 @@
       hsl(288deg 100% 78%) 73%,
       hsl(279deg 100% 76%) 82%,
       hsl(269deg 100% 75%) 91%,
-      hsl(259deg 100% 73%) 100%
+      var(--accent) 100%
     );
-  --lin-grad-4-color:
+  --lin-grad-4-hues:
     linear-gradient(
       45deg,
       var(--accent) 0%,
@@ -139,7 +190,7 @@
       hsl(174deg 100% 49%) 89%,
       var(--accent-extra) 100%
     );
-  // w/ easing and precision within 6 colours
+  // The sequence of hues w/ easing function
   --lin-grad-teal-purple-ease:
     linear-gradient(
       135deg,
@@ -152,7 +203,7 @@
       hsl(216deg 100% 66%) 76%,
       var(--accent) 100%
     );
-  --lin-grad-2-color:
+  --lin-grad-2-hues:
     linear-gradient(
       135deg,
       var(--accent-extra) 0%,
@@ -164,7 +215,7 @@
       hsl(251deg 89% 76%) 76%,
       var(--accent) 100%
     );
-  // w/ hinting and precision within 2 colours
+  // The sequence of 2 hues w/ hinting
   --lin-grad-halfs-hint:
     linear-gradient(
       135deg,
@@ -179,7 +230,7 @@
       33.333%,
       hsl(0 0% 100% / 0.25)
     );
-  // w/ repeating
+  // Stripes pattern
   --lin-grad-stripes:
     repeating-linear-gradient(
       -24deg,

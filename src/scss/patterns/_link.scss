@@ -29,7 +29,7 @@ a {
       pointer-events: none;
       content: '';
       filter: blur(0.125px);
-      background-image: var(--lin-grad-4-color);
+      background-image: var(--lin-grad-4-hues);
       transition: transform 300ms, filter 150ms;
       transform: scale3d(var(--sx, 0), 1, 1);
       transform-origin: var(--offset-x, 100%) 50%;
@@ -60,7 +60,7 @@ a {
     :not([data-js-anim], [data-icon])
   ) > span {
     --bg-w: 0;
-    background-image: var(--lin-grad-2-color);
+    background-image: var(--lin-grad-2-hues);
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: 0 var(--bg-h, 0);
