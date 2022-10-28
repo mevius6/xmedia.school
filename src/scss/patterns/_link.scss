@@ -16,7 +16,7 @@ a {
 
   &:any-link { cursor: pointer; }
 
-  // LVHA states
+  // Start of a link-related rule sequence, defined by the LVHA-order.
   &:is(:link, :visited) {
     // color: var(--link-text-color, var(--foreground));
     transition: all 150ms ease-in-out;
@@ -24,9 +24,9 @@ a {
 
   // &:is(:hover, :focus) {…}
 
-  // Hover effect for single-line links
-  // header > nav &:where(:not(.logo))::before {…}
-  // OR
+  // Hover effect for single-line links, e.g.
+  //   header > nav &:where(:not(.logo))::before {…}
+  // —or—
   &:where([href^='#{$hashLinks}'], :is(nav) [href^='/']) {
     &::after,
     &::before {
