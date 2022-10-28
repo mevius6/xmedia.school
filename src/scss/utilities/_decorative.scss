@@ -308,6 +308,12 @@
 }
 
 .text-gradient {
+  // @include config.text-gradient(
+  //   135deg,
+  //   var(--accent-shade),
+  //   var(--accent)
+  // );
+
   color: var(--trn);
   background: var(--lin-grad-4-hues);
   background-clip: text; // border-box

@@ -11,9 +11,18 @@ a {
 
   position: relative;
   overflow: hidden;
-  cursor: pointer;
   word-break: normal;
   background: var(--link-background);
+
+  &:any-link { cursor: pointer; }
+
+  // LVHA states
+  &:is(:link, :visited) {
+    // color: var(--link-text-color, var(--foreground));
+    transition: all 150ms ease-in-out;
+  }
+
+  // &:is(:hover, :focus) {…}
 
   // Hover effect for single-line links
   // header > nav &:where(:not(.logo))::before {…}
@@ -52,9 +61,6 @@ a {
     }
   }
 
-  // &:any-link {}
-  // &[aria-current='page'] {…}
-
   // Hover effect for multi-line links with line breaks
   :is(article, section, form, label) &:where(
     :not([data-js-anim], [data-icon])
@@ -76,26 +82,18 @@ a {
     }
   }
 
-  // &:is(:hover, :focus) {…}
-
-  &:is(:link, :visited) {
-    // color: var(--link-text-color, var(--foreground));
-    transition: all 150ms ease-in-out;
-  }
-
-  &:is(:focus, :active, [aria-current='page']) {
-    @include config.text-gradient(135deg, var(--accent-shade), var(--accent));
-
-    // color: var(--link-text-color, var(--accent-extra));
-
-    &:not([class*='cta']) { filter: brightness(120%); }
-  }
-
   // https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html
   &:focus-visible {
     outline: var(--accent-extra) dotted thin;
     outline-offset: 2px;
   }
+
+  &:is(:active, [aria-current='page']) {
+    // color: var(--link-text-color, var(--accent-extra));
+    &:not([class*='cta']) { filter: brightness(120%); }
+  }
+
+  // &[aria-current='page'] {…}
 
   &:where([href*='://'])::after {
     font-family: inherit;
@@ -118,7 +116,7 @@ a {
     border-radius: 2px;
     // box-shadow: var(--accent) 0 0 0 1px inset;
     box-shadow: 0 8px 24px var(--shadow);
-    text-shadow: 1px 1px #000a;
+    // text-shadow: 1px 1px #000a;
 
     // &:is(:focus, :active) { transform: translateY(1px); }
     &:active {
@@ -126,34 +124,6 @@ a {
       transform: translateY(1px) scale3d(.95, .95, 1);
     }
   }
-
-  // &[data-js-anim='bg-gradient'] {
-  //   --link-background:
-  //     linear-gradient(var(--background-a95), var(--background)) padding-box,
-  //     radial-gradient(
-  //       farthest-corner at var(--x, 0) var(--y, 0),
-  //       var(--accent-extra),
-  //       var(--accent-shade)
-  //     ) border-box;
-
-  //   appearance: none;
-  //   border: 2px solid transparent;
-  //   border-radius: var(--radius-x);
-  //   color: var(--foreground);
-
-  //   &:is(:active) {
-  //     --link-background:
-  //       linear-gradient(var(--background-a60), var(--background-a80)) padding-box,
-  //       radial-gradient(
-  //         farthest-corner at var(--x,50%) var(--y,50%),
-  //         var(--accent-extra),
-  //         var(--accent-shade)
-  //       ) border-box;
-
-  //     box-shadow: 0 0 0 var(--shadow);
-  //     transform: translateY(1px) scale3d(.95, .95, 1);
-  //   }
-  // }
 
   & > [data-icon] {
     --icon-size: 1.25rem;
