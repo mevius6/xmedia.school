@@ -1,16 +1,67 @@
 //- https://parceljs.org/languages/html/#json-ld
 script(type="application/ld+json").
   {
-    "@context": "http://schema.org",
+    "@context": [
+      "https://schema.org",
+      { "@language": "ru" }
+    ],
     "@type": "LocalBusiness",
     "name": "XMEDIA",
-    "description": "An educational platform.",
+    "description": "Цифровая образовательная среда",
     "telephone": "+7 929-989-2992",
+    "email": "mailto:info@xmedia.school",
     "openingHours": "Mo,Tu,We,Th,Fr 09:00-17:00",
     "logo": {
       "@type": "ImageObject",
       "url": "./static/android-chrome-512x512.png",
-      "width": 180,
-      "height": 120
+      "width": 512,
+      "height": 512
+    }
+  }
+
+//- Refs:
+  - https://schema.org/LearningResource
+  - https://schema.org/Course
+  - https://schema.org/Ticket
+  - https://schema.org/Schedule
+  - https://schema.org/eventAttendanceMode
+  - https://schema.org/Event
+  - https://schema.org/EducationEvent
+
+script(type="application/ld+json").
+  {
+    "@context": "https://schema.org/",
+    "@type": "Course",
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "startDate": "2022-03-11",
+      "endDate": "2023-07-05",
+      "duration": "PT7W",
+      "courseMode": [
+        "part-time",
+        "distance learning",
+        "online"
+      ],
+      "instructor": {
+        "@type": "Person",
+        "jobTitle": "Основательница, генеральный продюсер",
+        "name": "Тая Тарабрина, ",
+        "url": {"@id": "./#educator"},
+        "worksFor": "TAYAT "
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "40000",
+        "priceCurrency": "RUB"
+      }
+    },
+    "name": "Профессия продюсер",
+    "audience": {
+      "@type": "EducationalAudience",
+      "educationalRole": "producer"
+    },
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "X Media School"
     }
   }
