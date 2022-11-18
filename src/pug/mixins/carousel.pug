@@ -120,7 +120,7 @@ mixin carousel(props)
         li.carousel__slide(style={ '--columns': num })&attributes(slideAttList)
           if media
             -
-              let figureAttList = { class: 'angled-corners' },
+              let figureAttList = {},
                   attAspectRatio = { '--aspect-ratio': ratio },
                   // ↓ is figure contains figcaption
                   attRoleGroup = { 'role': 'group' }
@@ -128,6 +128,10 @@ mixin carousel(props)
               h = num > 1
                 ? 1350 // <-- vert
                 : 720 // <-- horiz
+            if props.figClipping
+              -
+                figureAttList['data-clip-region'] = props.figClipping['region']
+                figureAttList['class'] = ['clip-geometry', ...props.figClipping['class']]
             figure.carousel__image&attributes(figureAttList)
               +picture({
                 path: media,
