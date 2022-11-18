@@ -40,12 +40,6 @@
   transform: translate(-50%, -50%);
 }
 
-.grid-centered {
-  display: grid;
-  place-content: center;
-  // place-items: center;
-}
-
 .full-width {
   position: relative;
   right: 50%;
@@ -53,6 +47,24 @@
   width: 100vw;
   margin-right: -50vw;
   margin-left: -50vw;
+}
+
+// Inline and block size utilities, helpful in combination
+// with display-table utilities and images
+.inline-fit   { max-inline-size: 100% !important; }
+.inline-full  { inline-size: 100% !important; }
+.block-fit    { max-block-size: 100% !important; }
+.block-full   { block-size: 100% !important; }
+.inline-auto  { inline-size: auto !important; }
+.block-auto   { block-size: auto !important; }
+
+.grid { display: grid; }
+.grid-items-center   { place-items: center; }
+.grid-content-center { place-content: center; }
+
+// https://github.com/primer/css/blob/main/src/utilities/flexbox.scss#L1
+[class*='--items-center'] {
+  align-items: center;
 }
 
 // https://www.joshwcomeau.com/css/full-bleed/
@@ -66,6 +78,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-start { align-items: flex-start; }
 
 // https://css-tricks.com/equal-columns-with-flexbox-its-more-complicated-than-you-might-think/
 .flex-equal-cols > * { flex: 1; } // flex-basis: 100%;

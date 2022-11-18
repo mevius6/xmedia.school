@@ -16,11 +16,11 @@
   justify-content: space-around;
   inline-size: 100%;
 
-  // .byline { font-style: italic; }
+  .byline { font-style: italic; }
 
   .logo {
-    // block-size: 100%;
     max-inline-size: 100%;
+    block-size: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,24 +45,23 @@
       0 0 5px hsl(var(--white) / .15);
   }
 
-  u > svg {
+  svg {
     max-inline-size: 100%;
     block-size: auto;
-
     font-family: var(--font-primary);
     font-weight: 700;
     line-height: 1.1;
     will-change: transform;
-    transform: rotate(0) scale(1.25);
+    transform: rotate(0);
     animation: spinAroundAxle 7s linear infinite forwards;
-    filter: drop-shadow(0 3px 6px var(--accent-shade));
+    filter: drop-shadow(var(--shadow-md));
 
     & > text {
-      font-feature-settings: 'case' 1;
-      text-transform: uppercase;
-      stroke: var(--accent-shade);
       fill: currentcolor;
       color: var(--accent-extra);
+      stroke: var(--accent-shade);
+      text-transform: uppercase;
+      font-feature-settings: 'case' 1;
 
       [data-theme-style=light] & { color: var(--accent); }
     }
@@ -70,5 +69,5 @@
 }
 
 @keyframes spinAroundAxle {
-  from { transform: rotate(360deg) scale(1.25); }
+  from { transform: rotate(360deg); }
 }

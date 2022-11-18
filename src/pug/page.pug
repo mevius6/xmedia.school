@@ -1,7 +1,6 @@
 include ./mixins
-include ./toolchain
 include ./global-vars
-include ./text-content
+include ./static-data
 
 block vars
 
@@ -10,12 +9,7 @@ html(class="no-js" dir="ltr" lang="ru")
   head
     include ./_meta
 
-    block resource-hint-links
-
-    prepend resource-hint-links
-      each host in hosts
-        link(rel="preconnect" href=`https://${host}` crossorigin)
-        link(rel="dns-prefetch" href=`https://${host}` crossorigin)
+    block head-start
 
     link(
       rel="preload"
@@ -29,9 +23,7 @@ html(class="no-js" dir="ltr" lang="ru")
     link(rel="stylesheet" type="text/css" href="./scss/main.scss")
     script(defer type="module" src="./js/modules.js")
 
-    include ./_captcha
-
-    block head
+    block head-end
 
   body.page.page--loading(itemscope itemtype="https://schema.org/WebPage")
     noscript
@@ -50,8 +42,7 @@ html(class="no-js" dir="ltr" lang="ru")
       itemid= data.meta.domain
     )
       include ./_microdata
-      //-
-        .a2hs.hidden
+      //- .a2hs.hidden
           +cta({
             base: 'a2hs',
             type: 'button',

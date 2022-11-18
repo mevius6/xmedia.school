@@ -1,4 +1,8 @@
-//--> ------------------------------ IA ------------------------------ <--//
+//- ----------------------------------------------------------------------------
+    This file defines the information architecture of the website, i.e.
+    splitting the data into reusable chunks/fragments and formatting in relation
+    to pre-defined component props.
+    ----------------------------------------------------------------------------
 -
   // ¯\_(ツ)_/¯ = &macr;&bsol;&lowbar;&lpar;\u30C4&rpar;&lowbar;&sol;&macr;
   const asciiArt = '\u00AF\u005C\u005F\u0028\u30C4\u0029\u005F\u002F\u00AF'
@@ -40,7 +44,7 @@
     → privacy.pug
    */
   const meta = {
-    'trader': 'ИП Тарабрина Таисия Витальевна',
+    'saller': 'ИП Тарабрина Таисия Витальевна',
     'number': 'ИНН 501005401604 / ОГРНИП 317500700012752',
     'adds': [
       '141980, МО, г. Дубна, ул. Мещерякова, 18, кв. 4'
@@ -53,7 +57,7 @@
   const hashLinks = [
     {
       'title': 'Преподаватель',
-      'path': '#expert',
+      'path': '#educator',
     }, {
       'title': 'Кому подойдёт',
       'path': '#benefits',
@@ -62,10 +66,9 @@
       'path': '#outline',
     }, {
       'title': 'Чему вы научитесь',
-      'path': '#upskills',
+      'path': '#teaches',
     }, {
       'title': 'Расписание занятий',
-      //- 'path': '#agenda',
       'path': './agenda',
     }
   ]
@@ -80,21 +83,19 @@
     'body': `${quote} На авторском курсе Тая Тарабрина расскажет, как воплощать креативные идеи в жизнь${spacedEmDash}инсайты гарантированы.`
   }
 -
-  const expert = {
+  // teacher / lecturer / instructor / tutor / educator / author
+  const educator = {
     'name': 'Тая Тарабрина',
     'cv': [
       `Ведущая курса${spacedEmDash}продюсер, основатель продакшн-агенства TAYAT.`,
-      // За 14-летний период работы в индустрии…
-      // За 14 лет работы в индустрии, Тая обеспечила успешную реализацию множеству медийных проектов, в том числе и съёмкам для, таких изданий как: Achtung, Condé Nast, Dazed & Confused, Esquire, Hello! Icons, L\u2019Officiel, Port, TSUM Magazine и т. д.',
-      'За 14 лет работы в индустрии, Тая успешно реализовала множество медийных проектов, в том числе съёмки для, таких изданий как: Achtung Zeitschrift für Mode, Condé Nast, Dazed & Confused, Esquire, Hello! Icons, L\u2019Officiel, Port, TSUM Magazine и т. д.',
-      // …, такие бренды как: Adidas, Diego dalla Palma, Gucci, Krokus, Mercedes, Mercury, Nike, Rouge Bunny Rouge, Sberbank, Snow Queen, TSUM, Tsvetnoy, Xiaomi, Yandex…
-      // Клиентская база продюсерской компании пополнилась крупными представителями мировой индустрииб, например:
-      // Шоурил продюсерской компании пополнился заказами крупных брендов из различных сфер мировой индустрии, например:
+      'За 14 лет работы в индустрии Тая успешно реализовала множество медийных проектов, в том числе съёмки для, таких изданий как: Achtung Zeitschrift für Mode, Condé Nast, Dazed & Confused, Esquire, Hello! Icons, L\u2019Officiel, Port, TSUM Magazine и т. д.',
       'Продюсерская компания Таи заслужила доверие клиентов из разных сфер мировой индустрии, например: Adidas, Gucci, Mercedes, Mercury, Nike, Sberbank, TSUM, Tsvetnoy, Xiaomi, Yandex и т. д.'
+      // …, такие бренды как: Adidas, Diego dalla Palma, Gucci, Krokus, Mercedes, Mercury, Nike, Rouge Bunny Rouge, Sberbank, Snow Queen, TSUM, Tsvetnoy, Xiaomi, Yandex…
     ]
   }
 -
-  // MKTG-like: (focus-area(s) | target-area(s) | target-market | sphere)
+  // https://schema.org/audience
+  // Target (audience | area | market | sphere)
   // Преимущества для специалистов из различных сфер деятельности (ЦА)
   // Кому… (будет полезен | пойдёт на пользу | поможет) • Who will benefit?
   // На кого рассчитан курс?
@@ -120,6 +121,7 @@
     'Выполните ряд практических заданий, охватывающих широкий спектр задач по организации съёмочного процесса, разберёте реальные кейсы и добавите в портфолио 4 собственные съёмки.'
   ]
 -
+  // Invited Expert(s)
   const speakers = [
     {
       'text': 'Важным дополнением курса станут встречи с практикующими специалистами из индустрии медиа:'
@@ -136,8 +138,10 @@
     }
   ]
 -
-  // Upskilling
-  const upskills = [
+  // https://schema.org/teaches
+  // https://github.com/schemaorg/schemaorg/issues/2427
+  // what the resource is intended to help someone learn
+  const teaches = [
     {
       // 'Составлять брифы и находить общий язык с клиентами',
       'text': 'Понимать брифы, цели и задачи клиента',
@@ -158,6 +162,7 @@
     }
   ]
 -
+  // syllabus
   // Schedule & workshops
   // Расписание/график/план/программа
   // занятий/мастер-классов/семинаров/практикумов/симпозиума/курса
@@ -320,7 +325,8 @@
     }
   ]
 -
-  // Editorial (эдиториал для журналов/изданий), ADBs
+  // https://schema.org/worksFor
+  // Editorial (эдиториал для журналов/изданий)
   const slides1 = [
     {
       'title': 'Универмаг «Цветной»',

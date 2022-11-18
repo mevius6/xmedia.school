@@ -1,6 +1,6 @@
 {
   "meta": {
-    "brand": "X-Media School",
+    "brand": "X Media School",
     "domain": "https://www.xmedia.school",
     "email": "info@xmedia.school",
     "phone": "",
@@ -9,7 +9,7 @@
   },
   "pages": {
     "index": {
-      "description": "",
+      "description": "Цифровая образовательная среда",
       "id": "index",
       "keywords": "",
       "path": "/",
@@ -17,7 +17,7 @@
     },
     "agenda": {
       "description": "",
-      "id": "index",
+      "id": "agenda",
       "keywords": "",
       "path": ["/agenda.pug", "./agenda"],
       "title": ["Расписание занятий", ""]
@@ -25,21 +25,15 @@
     "privacy": {
       "id": "privacy",
       "path": ["./privacy.pug", "/privacy"],
-      "title": [
-        "Конфиденциальность",
-        ""
-      ],
+      "title": ["Конфиденциальность", ""],
       "description": "Политика обработки персональных данных",
       "keywords": ""
     },
     "offer": {
       "id": "offer",
       "path": ["./offer.pug", "/offer"],
-      "title": [
-        "Конфиденциальность",
-        ""
-      ],
-      "description": "Политика обработки персональных данных",
+      "title": ["Оферта", ""],
+      "description": "Договор оферты",
       "keywords": ""
     }
   },

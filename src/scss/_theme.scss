@@ -24,6 +24,8 @@
   // ----------------------------------
   // Color Palettes
   // ----------------------------------
+  // https://drafts.csswg.org/css2/#system-colors
+  // https://drafts.csswg.org/css-color-3/#css-system
 
   // HSL helpers
   --trn: hsl(0 0% 0% / 0);
@@ -413,10 +415,20 @@ body {
   // Shadows
   // ----------------------------------
 
-  --shadow-sm: 0 1px 0 rgba(27, 31, 36, 0.04);
-  --shadow-md: 0 3px 6px rgba(140, 149, 159, 0.15);
-  --shadow-lg: 0 8px 24px rgba(140, 149, 159, 0.2);
-  --shadow-xl: 0 12px 28px rgba(140, 149, 159, 0.3);
+  // Vars from Primer CSS:
+  // --shadow-sm: 0 1px 0 rgba(27, 31, 36, 0.04);
+  // --shadow-md: 0 3px 6px rgba(140, 149, 159, 0.15);
+  // --shadow-lg: 0 8px 24px rgba(140, 149, 159, 0.2);
+  // --shadow-xl: 0 12px 28px rgba(140, 149, 159, 0.3);
+
+  --shadow-a: 0.04;
+  --shadow-sm: 0 1px 0 var(--shadow-color);
+  --shadow-a: 0.15;
+  --shadow-md: 0 3px 6px var(--shadow-color);
+  --shadow-a: 0.2;
+  --shadow-lg: 0 8px 24px var(--shadow-color);
+  --shadow-a: 0.3;
+  --shadow-xl: 0 12px 28px var(--shadow-color);
 
   // Generators for smooth layered shadows
   // → https://shadows.brumm.af/
@@ -529,11 +541,10 @@ body {
   // → https://web.dev/css-clipping/
   // → https://css-tricks.com/almanac/properties/c/clip-path/
 
-  // ----------------------------------
-  // Clipping geometry
-  // ----------------------------------
+  // ✁---------------------------------
+  // Clipping Paths
+  // ✃---------------------------------
   // https://yoksel.github.io/relative-clip-path/
-  // https://augmented-ui.com/docs/#core
   // https://augmented-ui.com/mixinmixer/
 
   --shape-circle: circle(50% at 50% 50%);
@@ -556,28 +567,21 @@ body {
       0% 40%,100% 40%,100% 60%,0% 60%,
       0% 75%,100% 75%,100% 95%,0% 95%
     );
-  // Polygonal pointing shapes (may be morphing between)
-  // 5
+  // Polygonal (pointing) shapes that may be morphing between:
+  // https://drafts.csswg.org/css-shapes-1/#basic-shape-interpolation
+  // 5-angled
   --shape-pentagon:
     polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
   --shape-point-left: polygon(25% 0%, 100% 0%, 100% 100%, 25% 100%, 0% 50%);
   --shape-point-right: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%);
-  --a: 1rem;
-  --shape-point-left-cutout-tri-right:
-    polygon(
-      25% 0%, 100% 0%,
-      calc(100% + 1px) calc(50% - var(--a)), 100% calc(50% - var(--a)),
-      calc(100% - var(--a)) 50%, calc(100% - var(--a)) 50%,
-      100% calc(50% + var(--a)), calc(100% + 1px) calc(50% + var(--a)),
-      100% 100%, 25% 100%, 0% 50%);
-  // 6
+  // 6-angled
   --shape-hexagon:
     polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   --shape-chev-right:
     polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
   --shape-chev-left:
     polygon(100% 0, 50% 0, 0% 50%, 50% 100%, 100% 100%, 50% 50%);
-  // 7
+  // 7-angled
   --shape-heptagon:
     polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
   --shape-arr-left:

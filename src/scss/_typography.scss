@@ -84,6 +84,7 @@ body {
   font-size: var(--px2rem);
   font-weight: 400;
   line-height: 1.5;
+  font-display: swap; // fallback
   // text-rendering: optimizeSpeed;
   text-rendering: optimizeLegibility;
   font-feature-settings:
@@ -448,21 +449,20 @@ time {
 
 /* ----------------------------- Text decoration ---------------------------- */
 
+// Spec ☞ https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-u-element
+// u { text-decoration: var(--underline-color, var(--accent)) wavy underline; }
+
 .has-dropcap {
   @include config.drop-cap(6rem, 0.65);
 }
 
 .sideways {
-  padding-inline: var(--spacer-2x);
-
   @include config.respond('tablet') {
     @include config.sideways();
-
-    padding-inline: unset;
   }
 }
 
-// Stars and asterisks → https://www.unicode.org/charts/PDF/U2700.pdf
+// Stars and asterisks ☞ https://www.unicode.org/charts/PDF/U2700.pdf
 .dinkus {
   // Em-Space-Separated '✧' White Four Pointed Star(s)
   --seq-star-emsp: '\2727\2003\2727\2003\2727';

@@ -1,9 +1,5 @@
 @use '../config';
 
-// https://augmented-ui.com/docs/
-// https://augmented-ui.com/mixinmixer/
-// https://github.com/propjockey/augmented-ui/blob/main/augmented-ui.css#L1965
-
 // https://github.com/primer/css/tree/main/src/utilities
 
 // https://tobiasahlin.com/blog/how-to-animate-box-shadow/
@@ -18,22 +14,21 @@
     0 180px 80px hsl(200 95% 3% / .13);
 }
 
-// .h-divider,
-.v-divider {
+// https://ishadeed.com/article/use-cases-css-comparison-functions/#dynamic-line-separator
+// :is(.separator, .sep) {…}
+.divider {
   &::before {
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
     transform: translate(-50%, -50%);
 
-    block-size: 100%;
     inline-size: 1px;
-    background: var(--lin-grad-stripes);
+    block-size: 100%;
+    background: var(--bg, var(--neutral));
     content: '';
   }
 }
-// separator…
-// https://ishadeed.com/article/use-cases-css-comparison-functions/#dynamic-line-separator
 
 // https://css-tricks.com/snippets/css/ribbon/
 // https://dev.to/this-is-learning/fully-responsive-css-folded-ribbon-11h5
@@ -100,6 +95,33 @@
 
 /* ----------------------------- Backdrop (S)FX ----------------------------- */
 
+// Spotlight mask with smooth edges
+.spotlight-mask {
+  --maskSize1: 24px;
+  --maskSize2: 48px;
+  --maskSize3: 64px;
+  --spotlight:
+    radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      hsl(0 0% 0%) var(--maskSize1, 0%) 0,
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize1, 0%) + 0.1%),
+      var(--trn) 0,
+      var(--trn) var(--maskSize2, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize2, 0%) + 0.1%),
+      hsl(0 0% 0%) var(--maskSize2, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) - 0.1%),
+      hsl(0 0% 0%) var(--maskSize3, 0%),
+      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) + 0.1%),
+      var(--trn) 0
+    );
+
+  mask-image: var(--mask, var(--spotlight));
+}
+
+:where([class*='--side-fade']) {
+  @include config.side-fade();
+}
+
 [data-backdrop=overlay],
 .bg-overlay {
   &::after {
@@ -126,16 +148,6 @@
   background-image: var(--lin-grad-convex);
   overflow: hidden;
 
-  [data-theme-style=dark] & {
-    --lin-grad-convex:
-      linear-gradient(
-        -45deg,
-        var(--c1, hsl(0 0% 0% / 0.22)),
-        33.333%,
-        var(--c2, hsl(0 0% 0% / 0.25))
-      );
-  }
-
   &::after {
     position: absolute;
     inset: 0;
@@ -149,6 +161,16 @@
     // background-color: var(--background-a25);
     background-image: var(--lin-grad-4-hues);
     background-blend-mode: color-burn;
+  }
+
+  [data-theme-style=dark] & {
+    --lin-grad-convex:
+      linear-gradient(
+        -45deg,
+        var(--c1, hsl(0 0% 0% / 0.22)),
+        33.333%,
+        var(--c2, hsl(0 0% 0% / 0.25))
+      );
   }
 }
 
@@ -171,13 +193,19 @@
   }
 }
 
-// ? https://github.com/una/angled-corners
-// @mixin angled-corners() {…}
-.angled-corners {
-  --clip-1: polygon(0 10%, 10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-  --clip-2: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0px 90%);
+.clip-geometry {
+  @include config.polygonal-clipping();
+}
 
-  clip-path: var(--clip, var(--clip-1));
+.exclusion {
+  wrap-flow: both;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  shape-outside: circle(50% at 50% 50%);
+  border: 1px solid red;
 }
 
 // ambient light
@@ -207,6 +235,19 @@
   //   // mask: linear-gradient(135deg, #000 75%, transparent);
   // }
 
+:where([class*='--bloom']) {
+  position: relative;
+  display: inline-block;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    content: attr(data-count);
+    filter: blur(var(--bloom, var(--blur-md)));
+  }
+}
+
 [data-backdrop=bloom],
 .fx-bloom {
   --offset: 2.75rem;
@@ -230,7 +271,7 @@
   &::before,
   & > img { clip-path: var(--clip); }
 
-  // bloom
+  // gradient bloom
   &::after {
     z-index: -1;
     inset: 0;
@@ -242,7 +283,7 @@
     filter: blur(30px);
   }
 
-  // border
+  // gradient frame
   &::before {
     inset: -1px;
     background-image: linear-gradient(
@@ -251,32 +292,6 @@
       var(--accent-shade)
     );
   }
-}
-
-.masked {
-  --maskSize1: 24px;
-  --maskSize2: 48px;
-  --maskSize3: 64px;
-  --spotlight:
-    radial-gradient(
-      circle at var(--x, 50%) var(--y, 50%),
-      hsl(0 0% 0%) var(--maskSize1, 0%) 0,
-      hsl(0 0% 0% / 0.1) calc(var(--maskSize1, 0%) + 0.1%),
-      var(--trn) 0,
-      var(--trn) var(--maskSize2, 0%),
-      hsl(0 0% 0% / 0.1) calc(var(--maskSize2, 0%) + 0.1%),
-      hsl(0 0% 0%) var(--maskSize2, 0%),
-      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) - 0.1%),
-      hsl(0 0% 0%) var(--maskSize3, 0%),
-      hsl(0 0% 0% / 0.1) calc(var(--maskSize3, 0%) + 0.1%),
-      var(--trn) 0
-    );
-
-  mask-image: var(--mask, var(--spotlight));
-}
-
-:where([class*='--side-fade']) {
-  @include config.side-fade();
 }
 
 // https://dev.to/codingdudecom/everything-about-stroke-text-in-css-561i
@@ -325,34 +340,10 @@
 
 :where([class*='--stroke'], .paint-stroke) {
   --stroke-width: 2px;
-  --stroke-color: 2px;
+  --stroke-color: var(--accent);
 
   /* autoprefixer: ignore next */
   -webkit-text-stroke: var(--stroke-width) var(--stroke-color);
-}
-
-:where([class*='--bloom']) {
-  position: relative;
-  display: inline-block;
-
-  &::before {
-    position: absolute;
-    inset: 0;
-    background: inherit;
-    content: attr(data-count);
-    filter: blur(var(--bloom, var(--blur-md)));
-  }
-
-  /* img + img {
-      position: absolute;
-      top: -2vmin;
-      left: -2vmin;
-      z-index: -1;
-      width : calc(100% + 4vmin);
-      height: calc(100% + 4vmin);
-      filter: blur(8vw);
-    }
-  } */
 }
 
 .border-gradient {
@@ -410,13 +401,22 @@
 }
 
 .bg-layer {
+  // <bg-layer> = <bg-image> || <bg-position> [ / <bg-size> ]? || <repeat-style> || <attachment> || <box> || <box>
+
+  // <final-bg-layer> = <'background-color'> || <bg-image> || <bg-position> [ / <bg-size> ]? || <repeat-style> || <attachment> || <box> || <box>
+
   background-image: var(--bg-image, var(--pattern));
-  background-size: var(--bg-size, 100%);
   background-position: var(
     --bg-pos,
     var(--bg-posx, 50%)
     var(--bg-posy, 50%)
   );
+  background-size: var(--bg-size, 100%);
+  background-repeat: no-repeat;
+  background-clip: border-box;
+  background-origin: padding-box;
+  background-attachment: scroll;
+  background-image: none;
 
   &--pattern-1 {
     // https://drafts.csswg.org/css-images-4/#color-stop-syntax
@@ -513,27 +513,42 @@
   @include config.ticket();
 }
 
-// from https://codepen.io/t_afif/pen/dyexeKO
-/* .rounded-corner-cutout {
+// ( º0º) https://codepen.io/t_afif/pen/dyexeKO
+/* .rounded-cut-out {
   --circle-offset:
     calc(var(--big-circle-r) + var(--pillar-size) + var(--circle-r));
   --filler:
     conic-gradient(
       at right var(--circle-r) top var(--circle-r),
       #0000 25%,
-      var(--card-color) 0
+      var(--color) 0
     );
+
   position: relative;
   border-top-right-radius: 0;
-  filter: drop-shadow(var(--card-shadow));
-  background: radial-gradient(var(--big-circle-r) at 100% 0%,#0000 98%,var(--card-color)) calc(-1*var(--pillar-size)) var(--pillar-size), radial-gradient(var(--circle-r) at top var(--circle-r) right var(--circle-offset), var(--card-color) 98%,#0000), radial-gradient(var(--circle-r) at right var(--circle-r) top var(--circle-offset), var(--card-color) 98%,#0000), var(--filler) calc(-1*(var(--big-circle-r) + var(--pillar-size))) 0, var(--filler) 0 calc(var(--big-circle-r) + var(--pillar-size));
+  filter: drop-shadow(var(--shadow));
+  background:
+    radial-gradient(
+      var(--big-circle-r) at 100% 0%,
+      #0000 98%,
+      var(--color)
+    ) calc(-1*var(--pillar-size)) var(--pillar-size),
+    radial-gradient(
+      var(--circle-r) at top var(--circle-r) right var(--circle-offset),
+      var(--color) 98%,#0000),
+    radial-gradient(
+      var(--circle-r) at right var(--circle-r) top var(--circle-offset), var(--color) 98%,#0000
+    ),
+    var(--filler) calc(-1*(var(--big-circle-r) + var(--pillar-size))) 0,
+    var(--filler) 0 calc(var(--big-circle-r) + var(--pillar-size));
   background-repeat: no-repeat;
 
   --circle-r: 20px;
   --big-circle-r: 22px;
   --pillar-size: max(23px , var(--circle-r));
-  --card-color: #fff;
-  --card-shadow: 0 10px 48px rgba(21, 44, 115, 0.15);
+  --color: #fff;
+  --shadow: 0 10px 48px rgba(21, 44, 115, 0.15);
+
   width: 200px;
   min-height: 240px;
   border-radius: 25px;

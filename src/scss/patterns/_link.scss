@@ -16,17 +16,29 @@ a {
 
   &:any-link { cursor: pointer; }
 
-  // Start of a link-related rule sequence, defined by the LVHA-order.
+  // Start of a link-related pseudo-class sequence,
+  // defined by the LVHA-order.
+  // Spec → https://w3c.github.io/csswg-drafts/selectors/#useraction-pseudos
+  /*
+    [1]: https://w3c.github.io/csswg-drafts/selectors/#link
+    [2]:
+   */
+
+  // [1]
   &:is(:link, :visited) {
     // color: var(--link-text-color, var(--foreground));
     transition: all 150ms ease-in-out;
   }
 
+  // [2]
   // &:is(:hover, :focus) {…}
+  // —or—
+  // &:focus:hover {…}
 
   // Hover effect for single-line links, e.g.
   //   header > nav &:where(:not(.logo))::before {…}
-  // —or—
+  //   —or—
+  // ? https://w3c.github.io/csswg-drafts/selectors/#the-local-link-pseudo
   &:where([href^='#{$hashLinks}'], :is(nav) [href^='/']) {
     &::after,
     &::before {
@@ -49,6 +61,7 @@ a {
       --posy: 1ex;
       --offset-x: 0;
     }
+    // [2.1]
     &:hover::before,
     &:hover::after {
       --sx: 1;
@@ -75,6 +88,7 @@ a {
     --bg-h: 1px;
     padding-block-end: 1px;
 
+    // [2.2]
     &:where(:hover, :focus-visible) {
       // --bg-h: 100%;
       background-size: 100% var(--bg-h);

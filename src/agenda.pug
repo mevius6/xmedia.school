@@ -5,6 +5,7 @@ block vars
 
 block content
   section.grid
+    //- https://schema.org/Schedule
     .container.spaced.--lg#agenda(
       data-id="agenda"
     )
@@ -51,7 +52,7 @@ block content
               +link({ phone: meta.phone })
         .flow
           +unorderedList('Реквизиты')
-            li= meta.trader
+            li= meta.saller
             li= meta.number
         .flow
           +unorderedList('Платёжные системы')

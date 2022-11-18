@@ -3,13 +3,20 @@ extends ./pug/page
 block vars
   - let page = data.pages.index
 
+prepend head-start
+  if !isArrEmpty(hosts)
+    each host in hosts
+      link(rel="preconnect" href=`https://${host}` crossorigin)
+      link(rel="dns-prefetch" href=`https://${host}` crossorigin)
+
 block content
   section.grid
     .container.bg-overlay#hero(
       data-id="hero"
     )
-      video-player.grid__full(basename="page-hero")
+      //- video-player.grid__full(basename="page-hero")
       noscript: +video({ fileName: 'hero', dims: [1920, 1080] })
+
       article.flow.grid__start-half.mask-border-gradient&attributes({
         'data-backdrop': 'glassy'
       })
@@ -24,19 +31,19 @@ block content
           text: 'Записаться'
         })(data-js-anim='bg-gradient')
 
-    .container.spaced.--ada-lg#expert(
-      data-id="expert"
+    .container.spaced.--ada-lg.--items-center#educator(
+      data-id="educator"
     )
       +picture({
         class: ['grid__start-half', 'fx-bloom'],
-        name: 'expert',
+        name: 'educator',
         desc: '',
         hdim: 1024,
         format: 'png'
       })
       article.flow.grid__end-half
-        +head({ level: 2, text: expert.name, reveal: 'chars' })
-        each line in expert.cv
+        +head({ level: 2, text: educator.name, reveal: 'chars' })
+        each line in educator.cv
           p= line
 
     .container.spaced.--lg#reel1(
@@ -55,6 +62,9 @@ block content
           pagination: false,
           slideCols: 2,
           textWrap: 'article',
+          figClipping: {
+            class: ['preset-01']
+          }
         })
 
     .container.spaced.--ada-lg#benefits(
@@ -63,7 +73,7 @@ block content
       .grid__start-half
         +head({ level: 2, text: 'Кому будет полезен курс?', reveal: 'chars' })
       .grid__end-half
-        +list({ class: ['angled-corners'], items: benefits, icon: RARR })
+        +list({ class: ['clip-geometry'], items: benefits, icon: RARR })
 
     .container(data-id="ticker")
       +marquee({
@@ -97,15 +107,15 @@ block content
         animDir: 'reverse'
       })
 
-    .container.spaced.--ada-lg#upskills(
+    .container.spaced.--ada-lg#teaches(
       data-id="popout"
     )
       .grid__start-half
         +head({ level: 2, text: 'Чему вы научитесь?', reveal: 'chars' })
       .grid__end-half
         +list({
-          class: 'angled-corners',
-          items: upskills,
+          class: ['clip-geometry', 'preset-01'],
+          items: teaches,
           icon: RARR,
           reveal: true
         })
@@ -122,6 +132,9 @@ block content
         counter: false,
         pagination: true,
         textWrap: 'caption',
+        figClipping: {
+          class: ['angled-corners']
+        }
       })
 
     .container.spaced.--ada-lg#format(
@@ -130,7 +143,7 @@ block content
       .grid__start-half
         +head({ level: 2, text: 'Формат обучения', reveal: 'chars' })
       .grid__end-half
-        p.body.angled-corners
+        p.body.clip-geometry
           | Вы можете выбрать офлайн #[i или] онлайн формат. Все встречи проходят в
           |
           +link({
@@ -196,7 +209,7 @@ block content
               +link({ phone: meta.phone })
         .flow
           +unorderedList('Реквизиты')
-            li= meta.trader
+            li= meta.saller
             li= meta.number
         .flow
           +unorderedList('Платёжные системы')
