@@ -73,7 +73,12 @@ block content
       .grid__start-half
         +head({ level: 2, text: 'Кому будет полезен курс?', reveal: 'chars' })
       .grid__end-half
-        +list({ class: ['clip-geometry'], items: benefits, icon: RARR })
+        +list({
+          class: ['clip-geometry', 'preset-01'],
+          items: benefits,
+          icon: RARR,
+          reveal: true
+        })
 
     .container(data-id="ticker")
       +marquee({
@@ -143,7 +148,7 @@ block content
       .grid__start-half
         +head({ level: 2, text: 'Формат обучения', reveal: 'chars' })
       .grid__end-half
-        p.body.clip-geometry
+        p.body.clip-geometry.preset-02
           | Вы можете выбрать офлайн #[i или] онлайн формат. Все встречи проходят в
           |
           +link({

@@ -95,7 +95,7 @@
 
   &[class*='preset-02'] {
     --edge: 1rem;
-    --shape-point-left-cutout-tri-right:
+    --polygon:
       polygon(
         25% 0%, 100% 0%,
         calc(100% + 1px) calc(50% - var(--edge)), 100% calc(50% - var(--edge)),
